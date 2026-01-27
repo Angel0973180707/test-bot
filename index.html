@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸福教養概念館 - 智多星中控室</title>
+    <style>
+        :root {
+            --angel-pink: #ffb6c1;
+            --deep-pink: #d63384;
+            --soft-bg: #fff5f7;
+            --text-gray: #555;
+            --glass-white: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+            background-color: var(--soft-bg);
+            color: var(--text-gray);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .mastermind-card {
+            width: 100%;
+            max-width: 450px;
+            background: var(--glass-white);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.2);
+            border: 1px solid white;
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h2 { color: var(--deep-pink); margin: 0; font-size: 1.5rem; letter-spacing: 2px; }
+        .header p { font-size: 0.8rem; color: #999; margin-top: 5px; }
+
+        .search-area {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--angel-pink);
+            border-radius: 50px;
+            box-sizing: border-box;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            background: white;
+        }
+
+        input:focus { border-color: var(--deep-pink); }
+
+        .ask-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: var(--deep-pink);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #loading { display: none; text-align: center; color: var(--deep-pink); margin-bottom: 15px; font-weight: bold; }
+
+        #response-panel { display: none; animation: slideUp 0.5s ease; }
+
+        .angel-talk-box {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            border-left: 5px solid var(--deep-pink);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        }
+
+        .button-group { display: flex; flex-direction: column; gap: 12px; }
+
+        .btn {
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-sutra { background: #fff0f3; color: var(--deep-pink); border: 1px dashed var(--deep-pink); }
+        .btn-nav { background: var(--deep-pink); color: white; box-shadow: 0 8px 20px rgba(214, 51, 132, 0.2); }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mastermind-card">
+    <div class="header">
+        <h2>👼 幸福智多星</h2>
+        <p>雲端中控室 · 實時智慧導航</p>
+    </div>
+
+    <div class="search-area">
+        <input type="text" id="userInput" placeholder="輸入煩惱（如：不專心、芒果、生氣）...">
+        <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
+    </div>
+
+    <div id="loading">✨ 小天使笑長正在翻閱雲端經書...</div>
+
+    <div id="response-panel">
+        <div class="angel-talk-box" id="angelVoice"></div>
+        <div class="button-group">
+            <button class="btn btn-sutra" onclick="alert('導航中：教養幸福經全文展廳')">📖 回首頁：教養幸福經全文</button>
+            <button class="btn btn-nav" id="navBtn"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 笑長最新的 API 網址
+    const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbzeuQFds9g_H5_Wa7CIYSQs5k2KHBdDG45zPNNJF74xPfYU9NkSYXLBSKDZzcCWjaF3OA/exec";
+
+    async function fetchFromCloud() {
+        const input = document.getElementById('userInput').value.trim();
+        const loading = document.getElementById('loading');
+        const panel = document.getElementById('response-panel');
+        const voice = document.getElementById('angelVoice');
+        const navBtn = document.getElementById('navBtn');
+
+        if (!input) return alert("小天使笑長在聽，請跟我說說您的煩惱...");
+
+        loading.style.display = "block";
+        panel.style.display = "none";
+
+        try {
+            const response = await fetch(CLOUD_API_URL);
+            const data = await response.json();
+            
+            // 對應笑長試算表截圖中的中文欄位名稱
+            const match = data.find(row => {
+                const keys = row["偵測關鍵字（家長的心聲）"] || row["偵測關鍵字"] || row["Keywords"] || "";
+                // 支援逗號、頓號與空格分隔
+                return keys.toString().split(/[、,，\s]+/).some(k => input.includes(k.trim()));
+            });
+
+            loading.style.display = "none";
+            panel.style.display = "block";
+
+            if (match) {
+                // 1. 抓取解決方案 (B欄)
+                voice.innerHTML = match["解決方案"] || match["Response"] || "笑長正在為您祈福，這份智慧還在趕來的路上...";
+                
+                // 2. 抓取目標分頁 (D欄)
+                const pageName = match["目標分頁"] || match["Page"] || "幸福展廳";
+                navBtn.innerText = `🎬 前往 ${pageName}`;
+                
+                // 3. 抓取工具素材 (G欄) 或 影片素材1 (H欄)
+                const link = match["工具素材"] || match["影片素材1"] || match["PWALink"] || "";
+                
+                if (link && link.startsWith("http")) {
+                    navBtn.style.display = "block";
+                    navBtn.onclick = () => { window.location.href = link; };
+                } else {
+                    navBtn.innerText = "🎬 內容準備中";
+                    navBtn.onclick = () => { alert("這個內容笑長還在精心準備中，請先讀讀幸福經喔！"); };
+                }
+            } else {
+                voice.innerText = "笑長溫柔地聽著... 這份智慧尚未存入雲端。請試試搜尋「不專心」或「生氣」，或先點開上方【教養幸福經】。";
+                navBtn.style.display = "none";
+            }
+        } catch (error) {
+            loading.innerText = "❌ 連線失敗：請確保 API 權限已發佈為「任何人」。";
+            console.error("API Error:", error);
+        }
+    }
+</script>
+
+</body>
+</html>
