@@ -11,21 +11,19 @@
         .nav-tabs { display: flex; background: #fff; padding: 15px 5px; justify-content: space-around; border-bottom: 1px solid #eee; }
         .nav-item { text-align: center; text-decoration: none; color: #888; font-size: 0.8rem; flex: 1; }
         .nav-item.active { color: var(--deep-pink); font-weight: bold; }
-        .nav-icon { font-size: 1.2rem; display: block; margin-bottom: 2px; }
         .main-content { padding: 40px 20px; flex: 1; }
         .header { text-align: center; margin-bottom: 30px; }
         .header h1 { color: var(--deep-pink); font-size: 1.8rem; margin: 0; letter-spacing: 2px; }
-        .header p { font-size: 0.9rem; color: #888; margin-top: 10px; }
         .search-group { display: flex; background: #fff; border: 2px solid var(--angel-pink); border-radius: 50px; padding: 5px; box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2); margin-bottom: 25px;}
         .search-group input { flex: 1; border: none; padding: 12px 15px; border-radius: 50px; outline: none; font-size: 1rem; min-width: 0; }
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        #loading { display: none; text-align: center; color: var(--deep-pink); margin: 20px 0; font-weight: bold; }
+        #loading { display: none; text-align: center; color: var(--deep-pink); margin: 20px 0; }
         #response-panel { display: none; animation: fadeIn 0.5s ease; }
-        .angel-talk { background: #fffafb; padding: 25px; border-radius: 20px; line-height: 1.8; border-left: 6px solid var(--deep-pink); margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); color: #444; font-size: 1.05rem; white-space: pre-wrap; text-align: left; }
+        .angel-talk { background: #fffafb; padding: 25px; border-radius: 20px; line-height: 1.8; border-left: 6px solid var(--deep-pink); margin-bottom: 20px; color: #444; font-size: 1.05rem; white-space: pre-wrap; text-align: left; }
         .btn-group { display: flex; flex-direction: column; gap: 12px; }
         .btn { padding: 15px; border-radius: 15px; text-align: center; text-decoration: none; font-weight: bold; border: none; cursor: pointer; font-size: 1rem; }
         .btn-nav { background: var(--deep-pink); color: white; }
-        .btn-sutra { background: #fff; color: var(--deep-pink); border: 2.5px dashed var(--angel-pink); }
+        .btn-sutra { background: #fff; color: var(--deep-pink); border: 2px dashed var(--angel-pink); }
         .footer { text-align: center; padding: 40px 20px; font-size: 0.8rem; color: #bbb; line-height: 1.8; border-top: 1px solid #f9f9f9; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -33,18 +31,16 @@
 <body>
 <div class="container">
     <div class="nav-tabs">
-        <div class="nav-item">🏠<br>首頁</div>
-        <div class="nav-item">💎<br>館藏</div>
-        <div class="nav-item active">🧠<br>智多星</div>
-        <div class="nav-item">✨<br>關於</div>
+        <div class="nav-item">🏠<br>首頁</div><div class="nav-item">💎<br>館藏</div>
+        <div class="nav-item active">🧠<br>智多星</div><div class="nav-item">✨<br>關於</div>
     </div>
     <div class="main-content">
-        <div class="header"><h1>幸福智多星</h1><p>笑長與雲端智慧實時連線</p></div>
+        <div class="header"><h1>幸福智多星</h1><p>與笑長雲端智慧連線中</p></div>
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="輸入：愛生氣、吼叫、手足衝突...">
+            <input type="text" id="userInput" placeholder="輸入：愛生氣、不專心、手足衝突...">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
-        <div id="loading">✨ 小天使正在連線雲端倉庫...</div>
+        <div id="loading">✨ 小天使正在翻閱雲端經書...</div>
         <div id="response-panel">
             <div class="angel-talk" id="angelVoice"></div>
             <div class="btn-group">
@@ -78,34 +74,33 @@
             const response = await fetch(API_URL);
             const data = await response.json();
             
-            // 修正：依照截圖欄位名稱進行精準匹配
+            // 直接依照位置抓取：第1欄(A)關鍵字, 第2欄(B)回應, 第4欄(D)分頁, 第7欄(G)網址
             const match = data.find(row => {
-                const keys = row["偵測關鍵字 (家長的心聲)"] || row["偵測關鍵字（家長的心聲）"] || "";
-                return keys.toString().split(/[、,，\s]+/).some(k => input.includes(k.trim()));
+                const values = Object.values(row);
+                const keyStr = values[0] || ""; 
+                return keyStr.toString().split(/[、,，\s]+/).some(k => input.includes(k.trim()));
             });
 
             loading.style.display = "none";
             panel.style.display = "block";
 
             if (match) {
-                // 精準抓取 B 欄（解決方案）與 G 欄（工具素材）
-                voice.innerText = match["解決方案"] || "天使笑長懂您的心，正為您準備智慧對策。";
+                const values = Object.values(match);
+                voice.innerText = values[1] || "天使笑長懂您的心，正為您準備智慧對策。";
+                navBtn.innerText = `🎬 前往 ${values[3] || "幸福展廳"}`;
                 
-                const targetPage = match["目標分頁"] || "幸福展廳";
-                navBtn.innerText = `🎬 前往 ${targetPage}`;
-                
-                const link = match["工具素材"] || "";
+                const link = values[6] || "";
                 navBtn.onclick = () => {
                     if (link.toString().startsWith("http")) window.location.href = link;
                     else alert("此內容正在趕路中，請先讀讀幸福經喔！");
                 };
             } else {
-                voice.innerText = "笑長溫柔地聽著... 雲端尚未收錄此煩惱。請試試搜尋「愛生氣」來測試連線。";
+                voice.innerText = "笑長溫柔地聽著... 目前尚未收錄此關鍵字。試試「愛生氣」來測試連線！";
                 navBtn.innerText = "🎬 參觀幸福展廳";
                 navBtn.onclick = () => alert("導航至全館展廳...");
             }
         } catch (e) {
-            loading.innerText = "❌ 連線不順，請檢查 API 部署權限。";
+            loading.innerText = "❌ 連線不順，請確認 API 權限。";
         }
     }
 </script>
