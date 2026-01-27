@@ -37,7 +37,7 @@
     <div class="main-content">
         <div class="header"><h1>幸福智多星</h1><p>與笑長雲端智慧連線中</p></div>
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="輸入您的煩惱（如：生氣、吼叫）...">
+            <input type="text" id="userInput" placeholder="輸入：愛生氣、吼叫、不專心...">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
         <div id="loading">✨ 小天使正在翻閱雲端經書...</div>
@@ -74,9 +74,10 @@
             const response = await fetch(API_URL);
             const data = await response.json();
             
-            // 關鍵修正：確保搜尋 A 欄關鍵字，並讀取 B 欄解決方案
+            // 修正：透過數組索引定位，確保抓到 A 欄 (0) 關鍵字與 B 欄 (1) 解決方案
             const match = data.find(row => {
-                const keys = row["偵測關鍵字 (家長的心聲)"] || row["偵測關鍵字（家長的心聲）"] || "";
+                const values = Object.values(row);
+                const keys = values[0] || ""; 
                 return keys.toString().split(/[、,，\s]+/).some(k => input.includes(k.trim()));
             });
 
@@ -84,26 +85,24 @@
             panel.style.display = "block";
 
             if (match) {
+                const values = Object.values(match);
                 // 讀取 B 欄：解決方案
-                voice.innerText = match["解決方案"] || "天使笑長懂您的心，正在為您準備智慧對策。";
-                
-                // 讀取 D 欄：目標分頁
-                const targetPage = match["目標分頁"] || "幸福展廳";
-                navBtn.innerText = `🎬 前往 ${targetPage}`;
-                
-                // 讀取 G 欄：工具素材
-                const link = match["工具素材"] || "";
+                voice.innerText = values[1] || "天使笑長懂您的心，正在為您準備智慧對策。";
+                // 讀取 D 欄：分頁名稱
+                navBtn.innerText = `🎬 前往 ${values[3] || "幸福展廳"}`;
+                // 讀取 G 欄：影片/工具網址
+                const link = values[6] || "";
                 navBtn.onclick = () => {
                     if (link.toString().startsWith("http")) window.location.href = link;
                     else alert("此內容正在趕路中，請先讀讀幸福經喔！");
                 };
             } else {
-                voice.innerText = "笑長溫柔地聽著... 目前尚未收錄此關鍵字。請試試輸入「生氣」測試連線！";
+                voice.innerText = "笑長溫柔地聽著... 雲端尚未收錄此煩惱。請試試搜尋「愛生氣」來測試連線！";
                 navBtn.innerText = "🎬 參觀幸福展廳";
                 navBtn.onclick = () => alert("導航至全館展廳...");
             }
         } catch (e) {
-            loading.innerText = "❌ 連線不順，請確認 API 權限。";
+            loading.innerText = "❌ 連線不順，請檢查 API 部署權限。";
         }
     }
 </script>
