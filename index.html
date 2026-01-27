@@ -10,15 +10,16 @@
         .mastermind-card { width: 100%; max-width: 450px; background: white; border-radius: 30px; padding: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
         .header { text-align: center; margin-bottom: 20px; }
         .search-area { position: relative; margin-bottom: 20px; }
-        input { width: 100%; padding: 15px; border: 2px solid var(--angel-pink); border-radius: 50px; box-sizing: border-box; }
-        .ask-btn { position: absolute; right: 5px; top: 5px; background: var(--deep-pink); color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer; }
-        #response-panel { display: none; }
+        input { width: 100%; padding: 15px; border: 2px solid var(--angel-pink); border-radius: 50px; box-sizing: border-box; font-size: 16px; outline: none; }
+        .ask-btn { position: absolute; right: 5px; top: 5px; background: var(--deep-pink); color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer; font-weight: bold; }
+        #response-panel { display: none; animation: fadeIn 0.5s; }
         .angel-talk-box { background: #fff0f3; padding: 20px; border-radius: 20px; border-left: 5px solid var(--deep-pink); line-height: 1.8; margin-bottom: 20px; }
         .button-group { display: flex; flex-direction: column; gap: 10px; }
-        .btn { padding: 15px; border-radius: 15px; text-align: center; text-decoration: none; font-weight: bold; border: none; cursor: pointer; }
+        .btn { padding: 15px; border-radius: 15px; text-align: center; text-decoration: none; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; }
         .btn-sutra { background: white; border: 1px dashed var(--deep-pink); color: var(--deep-pink); }
         .btn-nav { background: var(--deep-pink); color: white; }
-        #loading { display: none; text-align: center; color: var(--deep-pink); margin-bottom: 10px; }
+        #loading { display: none; text-align: center; color: var(--deep-pink); margin-bottom: 10px; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -30,7 +31,7 @@
     </div>
 
     <div class="search-area">
-        <input type="text" id="userInput" placeholder="輸入關鍵字（如：芒果）...">
+        <input type="text" id="userInput" placeholder="輸入關鍵字（如：芒果、拖延）...">
         <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
     </div>
 
@@ -39,15 +40,15 @@
     <div id="response-panel">
         <div class="angel-talk-box" id="angelVoice"></div>
         <div class="button-group">
-            <button class="btn btn-sutra" onclick="location.href='#sutra'">📖 回首頁：教養幸福經全文</button>
+            <button class="btn btn-sutra" onclick="alert('導航至：教養幸福經全文')">📖 回首頁：教養幸福經全文</button>
             <button class="btn btn-nav" id="navBtn"></button>
         </div>
     </div>
 </div>
 
 <script>
-    // 這是笑長提供的雲端 API 網址
-    const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycby0pV6WoDctMcRpmd43M_mq4kJJ2xIN_dHBuazgSOQzkU5Kb0VDaGltPpkZGdIEKAfVRA/exec";
+    // 使用笑長最新的 API 網址
+    const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbzeuQFds9g_H5_Wa7CIYSQs5k2KHBdDG45zPNNJF74xPfYU9NkSYXLBSKDZzcCWjaF3OA/exec";
 
     async function fetchFromCloud() {
         const input = document.getElementById('userInput').value.trim();
@@ -56,34 +57,42 @@
         const voice = document.getElementById('angelVoice');
         const navBtn = document.getElementById('navBtn');
 
-        if (!input) return alert("請輸入煩惱喔！");
+        if (!input) return alert("小天使在聽，請跟我說說您的煩惱...");
 
         loading.style.display = "block";
         panel.style.display = "none";
 
         try {
-            // 遠端抓取試算表資料
+            // 遠端抓取資料
             const response = await fetch(CLOUD_API_URL);
             const data = await response.json();
             
-            // 搜尋邏輯：對應試算表中的 Keywords 欄位
-            const match = data.find(row => 
-                row.Keywords && row.Keywords.split(',').some(key => input.includes(key.trim()))
-            );
+            console.log("雲端資料讀取成功：", data); // 偵錯用
+
+            // 搜尋邏輯：檢查 Keywords 欄位 (不分大小寫包含即可)
+            const match = data.find(row => {
+                const keys = row.Keywords || row.關鍵字 || "";
+                return keys.split(',').some(key => input.includes(key.trim()));
+            });
 
             loading.style.display = "none";
             panel.style.display = "block";
 
             if (match) {
-                voice.innerHTML = match.Response || "笑長正在為您祈福...";
-                navBtn.innerText = `🎬 前往 ${match.Page || '展廳'}`;
-                navBtn.onclick = () => window.location.href = match.PWALink || "#";
+                // 這裡會抓取 Response (或 回應) 欄位
+                voice.innerHTML = match.Response || match.回應 || "笑長正在為您祈福，這份智慧還在趕來的路上...";
+                navBtn.innerText = `🎬 前往 ${match.Page || match.目標分頁 || '展廳'}`;
+                navBtn.style.display = "block";
+                navBtn.onclick = () => {
+                    const link = match.PWALink || match.連結 || "#";
+                    window.location.href = link;
+                };
             } else {
-                voice.innerText = "雲端資料庫尚未收錄此煩惱，建議先讀讀幸福經，或換個詞試試？";
-                navBtn.innerText = "🎬 隨機參觀展廳";
+                voice.innerText = "笑長溫柔地聽著... 這顆芒果的祕密尚未存入雲端。請試試輸入「拖延」看看 API 是否接通，或先讀讀幸福經。";
+                navBtn.style.display = "none";
             }
         } catch (error) {
-            loading.innerText = "❌ 連線失敗，請檢查 API 權限或網路。";
+            loading.innerText = "❌ 連線失敗：請確認 API 已發佈為「任何人」都可存取。";
             console.error("API Error:", error);
         }
     }
