@@ -3,100 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星測試實驗室 | 天使笑長</title>
+    <title>幸福智多星 - 測試體驗版</title>
     <style>
-        :root { --main-pink: #ff8da1; --soft-pink: #fff5f7; --text-gray: #5a4a4a; }
-        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: var(--soft-pink); color: var(--text-gray); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        
-        /* 1. 登錄彈窗樣式 */
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .login-box { background: white; padding: 40px; border-radius: 30px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 2px solid var(--main-pink); max-width: 85%; }
-        
-        /* 2. 主介面樣式 */
-        .app-container { max-width: 600px; width: 90%; margin-top: 50px; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .search-box { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
-        input[type="text"] { padding: 15px; border: 2px solid #eee; border-radius: 15px; font-size: 1rem; outline: none; }
-        input[type="text"]:focus { border-color: var(--main-pink); }
-        .btn-main { background: var(--main-pink); color: white; border: none; padding: 15px; border-radius: 15px; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
-        .btn-main:hover { background: #ff768d; transform: translateY(-2px); }
-
-        /* 3. 回應區卡片 */
-        #response-area { display: none; border-top: 2px dashed #eee; padding-top: 20px; }
-        .ai-message { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 5px solid var(--main-pink); margin-bottom: 20px; line-height: 1.6; }
-        .content-card { background: #fdfdfd; border: 1px solid #eee; border-radius: 20px; overflow: hidden; }
-        .card-header { background: #eee; padding: 8px 15px; font-size: 0.85rem; font-weight: bold; }
-        .card-body { padding: 20px; }
-        .btn-tool { display: inline-block; margin-top: 15px; background: #6c757d; color: white; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-size: 0.9rem; }
+        :root { --main-pink: #ffb6c1; --soft-bg: #fff5f7; --text-gray: #555; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: var(--soft-bg); color: var(--text-gray); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .mastermind-box { width: 100%; max-width: 500px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(255,182,193,0.3); }
+        h2 { color: #d63384; text-align: center; margin-bottom: 10px; }
+        p.intro { font-size: 0.9em; text-align: center; margin-bottom: 20px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 12px; border: 2px solid var(--main-pink); border-radius: 10px; outline: none; }
+        button.search-btn { background: var(--main-pink); border: none; padding: 10px 20px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; }
+        #response-area { min-height: 100px; border-top: 1px solid #eee; padding-top: 20px; display: none; }
+        .angel-voice { background: #fff0f3; padding: 15px; border-left: 5px solid var(--main-pink); border-radius: 5px; margin-bottom: 15px; line-height: 1.6; }
+        .nav-buttons { display: flex; flex-direction: column; gap: 10px; }
+        .nav-btn { background: white; border: 2px solid var(--main-pink); color: #d63384; padding: 10px; border-radius: 8px; text-decoration: none; text-align: center; font-size: 0.9em; transition: 0.3s; cursor: pointer; }
+        .nav-btn:hover { background: var(--main-pink); color: white; }
+        .sutra-btn { background: #ffecf0; border: 2px dashed #d63384; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="login-overlay">
-    <div class="login-box">
-        <h2 style="color: var(--main-pink);">👼 您好！我是天使笑長</h2>
-        <p>歡迎來到「智多星測試實驗室」。<br><br>這是我正在孵化的智慧大腦，旨在為家長即時匹配最佳教養方案。<br><b>請輸入您的煩惱，讓我們測試看看這個大腦夠不夠聰明？</b></p>
-        <button class="btn-main" onclick="closeLogin()">進入實驗室</button>
-    </div>
-</div>
+    <div class="mastermind-box">
+        <h2>👼 幸福智多星</h2>
+        <p class="intro">請輸入您的教養心聲（如：孩子拖延、忍不住吼人...）</p>
+        
+        <div class="input-group">
+            <input type="text" id="userInput" placeholder="在此輸入關鍵字...">
+            <button class="search-btn" onclick="askMastermind()">詢問</button>
+        </div>
 
-<div class="app-container">
-    <h1 style="text-align: center; color: var(--main-pink);">幸福智多星</h1>
-    
-    <div class="search-box">
-        <input type="text" id="userInput" placeholder="例如：我剛才吼了小孩、親子疏離...">
-        <button class="btn-main" onclick="startSearch()">尋找導覽方案</button>
-    </div>
-
-    <div id="response-area">
-        <div id="ai-voice" class="ai-message"></div>
-        <div class="content-card">
-            <div id="card-tag" class="card-header"></div>
-            <div class="card-body">
-                <h3 id="card-title" style="margin-top: 0;"></h3>
-                <p id="card-desc" style="color: #666; font-size: 0.95rem;"></p>
-                <div id="card-action"></div>
-            </div>
+        <div id="response-area">
+            <div class="angel-voice" id="angelVoice"></div>
+            <div class="nav-buttons" id="navButtons"></div>
         </div>
     </div>
-</div>
 
 <script>
-    function closeLogin() { document.getElementById('login-overlay').style.display = 'none'; }
-
-    // 此處模擬您試算表中的 10 大核心資料 (等連動 API 後將自動讀取)
-    const mockDatabase = [
-        { key: "吼、失控、發火", voice: "天使笑長：我懂那種不想罵卻吼出來的挫折，這其實是大腦的自動化誘捕。讓我們進到「心腦展廳」，看見失控的真相。", id: "腦-05-L", room: "1.心腦展廳", link: "", tool: "COM-01-反應選擇" },
-        { key: "疏離、不講話、關係", voice: "天使笑長：愛需要流動的空間。讓我們走進「生命劇場」，看看天使笑長如何透過日常的小縫隙，重新接回與孩子心的連線。", id: "事-02-s", room: "2.生命劇場", link: "", tool: "EQ-03-心懂OK蹦" },
-        { key: "後悔、自責、我不配", voice: "天使笑長：所有的錯都是為了讓我們學會如何去愛。進到「心靈會所」，溫柔地看見那個努力的自己。", id: "悟-01-s", room: "4.心靈會所", link: "https://youtu.be/example1", tool: "EQ-03-心懂OK蹦" }
+    // 12大核心痛點完整資料庫
+    const masteryDatabase = [
+        {
+            keywords: ["吼叫", "失控", "發火", "忍不住罵人"],
+            response: "天使笑長懂你的懊惱。讓我們先回首頁，點開【館藏】讀讀《教養幸福經》，穩定大腦的理性空間；再進到「心腦展廳」看見失控的真相。",
+            id: "腦-05-L",
+            page: "1. 心腦展廳"
+        },
+        {
+            keywords: ["後悔", "自責", "我錯了", "我不配"],
+            response: "讓我們放下得失。請先回首頁點開【館藏】，讀讀《教養幸福經》中「與其要求，不如感恩」的轉念心法；再進「心靈會所」找回愛的能力。",
+            id: "悟-01-s, 悟-07-s",
+            page: "4. 心靈會所"
+        },
+        {
+            keywords: ["崩潰", "無力", "不知怎麼教"],
+            response: "給自己一個深呼吸。請先回首頁點擊【館藏】，讀讀《教養幸福經》中關於逆境與幸福的心境；再進「心靈會所」沈澱充電，找回解決問題的靈感。",
+            id: "悟-02-s",
+            page: "4. 心靈會所"
+        },
+        {
+            keywords: ["焦慮", "不安", "停不下來", "害怕"],
+            response: "焦慮是因為心還沒安放。建議先回首頁點擊【館藏】，讀讀《教養幸福經》中關於感恩與腦科學的穩定力量；再到「心靈會所」安頓身心。",
+            id: "悟-03-s",
+            page: "4. 心靈會所"
+        },
+        {
+            keywords: ["挫折", "失敗", "沒用", "沒成就感"],
+            response: "外在的擁有確實可能歸零，但在「心靈會所」領悟過的每一份經驗，誰也帶不走。",
+            id: "悟-04-s",
+            page: "4. 心靈會所"
+        },
+        {
+            keywords: ["好煩", "混亂", "事情太多", "亂"],
+            response: "簡單不是刪減，是穿透複雜後的透徹。我們在「心靈會所」中，找出生活最重要的一條線。",
+            id: "悟-06-s",
+            page: "4. 心靈會所"
+        },
+        {
+            keywords: ["不快樂", "苦悶", "日子沒味道", "乾枯"],
+            response: "只要心是甜的，看出去的世界才有甜滋味。讓我們在「心靈會所」裡，一起收集細微的光。",
+            id: "悟-08-s",
+            page: "4. 心靈會所"
+        },
+        {
+            keywords: ["舊傷", "回憶", "陰影", "以前受傷"],
+            response: "記憶不是檔案，是隨時可改寫的草稿。在「心靈會所」中，你有能力洗滌過去、重新定義愛。",
+            id: "悟-09-s",
+            page: "4. 心靈會所"
+        },
+        {
+            keywords: ["孩子慢", "拖延", "不主動", "寫功課要人催"],
+            response: "每個孩子都有自己的花期，讓我們走進「生命劇場」，觀看「海鷗和麻雀」的故事，學習等待與接納。",
+            id: "幸福教養後記",
+            page: "2. 生命劇場"
+        },
+        {
+            keywords: ["疏離", "不配合", "對抗", "叛逆", "不跟我講話", "冷戰", "不親近"],
+            response: "愛需要流動的空間。讓我們先回首頁，點開【館藏】讀讀《教養幸福經》中「愛與感恩」的心法；再進「生命劇場」重新接回與孩子心的連線。",
+            id: "家庭2, 家庭15, 家庭16",
+            page: "2. 生命劇場"
+        },
+        {
+            keywords: ["觀念不一致", "豬隊友", "公婆", "干涉", "衝突"],
+            response: "不同的聲音中，更需要感恩。請先回首頁點擊【館藏】，讀讀《教養幸福經》關於和諧與互信的建立；再進「生命劇場」學習守護幸福核心。",
+            id: "家庭6",
+            page: "2. 生命劇場"
+        },
+        {
+            keywords: ["告狀", "吵架", "競爭", "不公平", "依賴", "不獨立", "溺愛", "不知分寸"],
+            response: "告狀的背後是呼喚關注，依賴的背後是缺乏力量。請先回首頁點開【館藏】，讀讀幸福經關於大愛的智慧，再到「生命劇場」與「實踐工房」領取心法與工具。",
+            id: "家庭9, 家庭12, 家庭5",
+            page: "2. 生命劇場 / 實踐工房"
+        }
     ];
 
-    function startSearch() {
+    function askMastermind() {
         const input = document.getElementById('userInput').value;
-        const resArea = document.getElementById('response-area');
-        if(!input) return;
+        const responseArea = document.getElementById('response-area');
+        const angelVoice = document.getElementById('angelVoice');
+        const navButtons = document.getElementById('navButtons');
 
-        // 搜尋匹配邏輯
-        const match = mockDatabase.find(item => input.includes(item.key.split('、')[0]));
+        if (!input) { alert("請輸入您的心聲喔！"); return; }
 
-        if(match) {
-            resArea.style.display = 'block';
-            document.getElementById('ai-voice').innerText = match.voice;
-            document.getElementById('card-tag').innerText = "📍 導覽目標：" + match.room;
-            document.getElementById('card-title').innerText = "推薦內容 ID：" + match.id;
-            
-            // 判斷連結是否為空 (關鍵邏輯)
-            if(match.link === "") {
-                document.getElementById('card-desc').innerHTML = `<span style="color: #d9534f; font-weight: bold;">⚠️ 精心策劃製作中</span><br>天使笑長正在【${match.room}】為您精心準備這份內容，敬請期待！`;
-                document.getElementById('card-action').innerHTML = "";
-            } else {
-                document.getElementById('card-desc').innerText = "天使笑長已為您準備好影片，請點擊下方按鈕觀看。";
-                document.getElementById('card-action').innerHTML = `<a href="${match.link}" target="_blank" class="btn-main" style="text-decoration:none; display:inline-block;">立即進入觀看</a>`;
-            }
-            
-            // 聯動工具按鈕
-            document.getElementById('card-action').innerHTML += `<br><a href="#" class="btn-tool">🔧 同步啟動：${match.tool}</a>`;
+        // 模糊搜尋邏輯
+        const result = masteryDatabase.find(item => 
+            item.keywords.some(keyword => input.includes(keyword))
+        );
+
+        responseArea.style.display = "block";
+
+        if (result) {
+            angelVoice.innerText = result.response;
+            navButtons.innerHTML = `
+                <div class="nav-btn sutra-btn" onclick="alert('導覽：正開啟首頁【館藏】按鈕...')">📖 回首頁讀：教養幸福經</div>
+                <div class="nav-btn" onclick="alert('導覽：前往 ${result.page}，尋找 ID: ${result.id}')">🎬 前往 ${result.page}</div>
+            `;
         } else {
-            alert("天使笑長還在為這個問題思考解藥，請試試輸入『吼叫』或『疏離』！");
+            angelVoice.innerText = "笑長正在聽...目前的搜尋還沒對上特定展廳，但別擔心，您可以先回首頁讀讀【幸福經】全文，或試著換個詞說說看？";
+            navButtons.innerHTML = `<div class="nav-btn sutra-btn" onclick="alert('開啟館藏全文')">📖 讀讀教養幸福經全文</div>`;
         }
     }
 </script>
