@@ -3,151 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - API 雲端中控對接版</title>
+    <title>幸福教養概念館 - 智多星雲端連線</title>
     <style>
-        :root { --main-pink: #ffb6c1; --soft-bg: #fff5f7; --text-gray: #555; --deep-pink: #d63384; }
-        body { font-family: "Microsoft JhengHei", sans-serif; background: var(--soft-bg); padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        
-        /* 智多星主外框 */
-        .mastermind-container { width: 100%; max-width: 500px; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 15px 35px rgba(255,182,193,0.3); position: relative; overflow: hidden; }
-        
-        h2 { color: var(--deep-pink); text-align: center; margin-bottom: 5px; }
-        .subtitle { text-align: center; font-size: 0.85em; color: #888; margin-bottom: 20px; }
-
-        /* 輸入區 */
-        .search-box { display: flex; gap: 10px; margin-bottom: 25px; }
-        input { flex: 1; padding: 15px; border: 2px solid var(--main-pink); border-radius: 15px; outline: none; font-size: 16px; }
-        .search-btn { background: var(--main-pink); border: none; padding: 0 20px; border-radius: 15px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .search-btn:hover { background: var(--deep-pink); }
-
-        /* 回應區 */
-        #response-panel { display: none; animation: fadeIn 0.5s ease; }
-        .angel-talk { background: #fff0f3; padding: 20px; border-radius: 15px; border-left: 6px solid var(--main-pink); line-height: 1.7; color: #444; margin-bottom: 20px; position: relative; }
-        
-        /* 功能按鈕 */
-        .action-group { display: flex; flex-direction: column; gap: 12px; }
-        .btn { padding: 15px; border-radius: 12px; text-decoration: none; text-align: center; font-weight: bold; cursor: pointer; transition: 0.3s; display: block; border: none; }
-        .btn-sutra { background: #ffecf0; color: var(--deep-pink); border: 2px dashed var(--deep-pink); }
-        .btn-nav { background: white; border: 2px solid var(--main-pink); color: var(--deep-pink); }
-        .btn-tool { background: var(--deep-pink); color: white; box-shadow: 0 4px 10px rgba(214,51,132,0.3); display: none; }
-
-        /* 幸福信封動畫 */
-        #envelope-anim { display: none; text-align: center; margin: 20px 0; animation: bounce 1s infinite; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        :root { --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: var(--soft-bg); display: flex; justify-content: center; padding: 20px; }
+        .mastermind-card { width: 100%; max-width: 450px; background: white; border-radius: 30px; padding: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 20px; }
+        .search-area { position: relative; margin-bottom: 20px; }
+        input { width: 100%; padding: 15px; border: 2px solid var(--angel-pink); border-radius: 50px; box-sizing: border-box; }
+        .ask-btn { position: absolute; right: 5px; top: 5px; background: var(--deep-pink); color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer; }
+        #response-panel { display: none; }
+        .angel-talk-box { background: #fff0f3; padding: 20px; border-radius: 20px; border-left: 5px solid var(--deep-pink); line-height: 1.8; margin-bottom: 20px; }
+        .button-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn { padding: 15px; border-radius: 15px; text-align: center; text-decoration: none; font-weight: bold; border: none; cursor: pointer; }
+        .btn-sutra { background: white; border: 1px dashed var(--deep-pink); color: var(--deep-pink); }
+        .btn-nav { background: var(--deep-pink); color: white; }
+        #loading { display: none; text-align: center; color: var(--deep-pink); margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="mastermind-container">
+<div class="mastermind-card">
+    <div class="header">
         <h2>👼 幸福智多星</h2>
-        <div class="subtitle">您的雲端教養管家（API 中控模式）</div>
-        
-        <div class="search-box">
-            <input type="text" id="userInput" placeholder="輸入您的心情或孩子狀況...">
-            <button class="search-btn" onclick="triggerMastermind()">詢問</button>
-        </div>
-
-        <div id="response-panel">
-            <div class="angel-talk" id="angelVoice"></div>
-            
-            <div id="envelope-anim">✉️ 🌸 小天使正在為您準備幸福工具...</div>
-
-            <div class="action-group">
-                <button class="btn btn-sutra" onclick="goToSutra()">📖 回首頁讀：教養幸福經</button>
-                <button class="btn btn-nav" id="navBtn" onclick="goToGallery()"></button>
-                <button class="btn btn-tool" id="toolBtn" onclick="downloadTool()">📥 領取：專屬陪伴工具 (PWA 下載)</button>
-            </div>
-        </div>
+        <p>雲端中控室實時連線中</p>
     </div>
 
-<script>
-    /* ----------------------------------------------------------------
-       1. API 接軌模擬：這段資料未來會從 Google Sheets API 實時抓取
-       ---------------------------------------------------------------- */
-    const mockSheetAPI = [
-        {
-            keywords: "愛生氣, 脾氣, 暴怒, 吼叫, 失控, 發火, 忍不住罵人, 罵小孩, 脾氣大, 亂發脾氣",
-            response: "天使笑長懂你的懊惱。讓我們先回首頁，點開【館藏】讀讀《教養幸福經》，穩定大腦的理性空間；再進到「心腦展廳」看見失控的真相。",
-            contentID: "腦-05-L", 
-            pageName: "1. 心腦展廳",
-            toolURL: "" 
-        },
-        {
-            keywords: "孩子慢, 拖延, 不主動, 寫功課, 要人催, 磨蹭, 講不聽, 很皮, 懶散, 動作慢",
-            response: "每個孩子都有自己的花期，讓我們走進「生命劇場」看見成長的節奏。笑長也為您準備了【自主計時工具】，陪孩子練習掌控時間。",
-            contentID: "幸福教養後記", 
-            pageName: "2. 生命劇場",
-            toolURL: "https://example.com/timer-tool.pdf" // 模擬 PDF 連結
-        },
-        {
-            keywords: "後悔, 自責, 我錯了, 我不配, 失敗, 罪惡感, 對不起孩子",
-            response: "讓我們放下得失。請先回首頁點開【館藏】，讀讀《教養幸福經》中「與其要求，不如感恩」的轉念心法；再進「心靈會所」找回愛的能力。",
-            contentID: "悟-01-s", 
-            pageName: "4. 心靈會所",
-            toolURL: ""
-        }
-        // ... 此處可擴充至 12 項或更多，結構完全對應試算表
-    ];
+    <div class="search-area">
+        <input type="text" id="userInput" placeholder="輸入關鍵字（如：芒果）...">
+        <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
+    </div>
 
-    /* ----------------------------------------------------------------
-       2. 智多星核心偵測邏輯
-       ---------------------------------------------------------------- */
-    function triggerMastermind() {
+    <div id="loading">✨ 小天使正在翻閱雲端經書...</div>
+
+    <div id="response-panel">
+        <div class="angel-talk-box" id="angelVoice"></div>
+        <div class="button-group">
+            <button class="btn btn-sutra" onclick="location.href='#sutra'">📖 回首頁：教養幸福經全文</button>
+            <button class="btn btn-nav" id="navBtn"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 這是笑長提供的雲端 API 網址
+    const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycby0pV6WoDctMcRpmd43M_mq4kJJ2xIN_dHBuazgSOQzkU5Kb0VDaGltPpkZGdIEKAfVRA/exec";
+
+    async function fetchFromCloud() {
         const input = document.getElementById('userInput').value.trim();
+        const loading = document.getElementById('loading');
         const panel = document.getElementById('response-panel');
         const voice = document.getElementById('angelVoice');
         const navBtn = document.getElementById('navBtn');
-        const toolBtn = document.getElementById('toolBtn');
-        const envelope = document.getElementById('envelope-anim');
 
-        if (!input) { alert("笑長在聽，請跟我說說您的煩惱..."); return; }
+        if (!input) return alert("請輸入煩惱喔！");
 
-        // 模擬 API 檢索過程 (包含關鍵字過濾)
-        const match = mockSheetAPI.find(row => 
-            row.keywords.split(',').some(key => input.includes(key.trim()))
-        );
+        loading.style.display = "block";
+        panel.style.display = "none";
 
-        panel.style.display = "block";
-        envelope.style.display = "none"; // 重置動畫
-        toolBtn.style.display = "none"; // 重置工具鈕
+        try {
+            // 遠端抓取試算表資料
+            const response = await fetch(CLOUD_API_URL);
+            const data = await response.json();
+            
+            // 搜尋邏輯：對應試算表中的 Keywords 欄位
+            const match = data.find(row => 
+                row.Keywords && row.Keywords.split(',').some(key => input.includes(key.trim()))
+            );
 
-        if (match) {
-            voice.innerText = match.response;
-            navBtn.innerText = `🎬 前往 ${match.pageName} (尋找 ID: ${match.contentID})`;
-            navBtn.setAttribute('data-target', match.contentID);
+            loading.style.display = "none";
+            panel.style.display = "block";
 
-            // 如果 E 欄有工具連結，啟動 PWA 領取邏輯
-            if (match.toolURL) {
-                envelope.style.display = "block";
-                setTimeout(() => {
-                    envelope.style.display = "none";
-                    toolBtn.style.display = "block";
-                    toolBtn.onclick = () => window.open(match.toolURL, '_blank');
-                }, 1500); // 模擬 1.5 秒的「準備工具」儀式感動畫
+            if (match) {
+                voice.innerHTML = match.Response || "笑長正在為您祈福...";
+                navBtn.innerText = `🎬 前往 ${match.Page || '展廳'}`;
+                navBtn.onclick = () => window.location.href = match.PWALink || "#";
+            } else {
+                voice.innerText = "雲端資料庫尚未收錄此煩惱，建議先讀讀幸福經，或換個詞試試？";
+                navBtn.innerText = "🎬 隨機參觀展廳";
             }
-        } else {
-            voice.innerText = "小天使笑長正在溫柔聆聽...雖然字典還沒完全對上，但請先回首頁讀讀【幸福經】，那是所有問題的解藥。";
-            navBtn.innerText = "🎬 隨機參觀展廳";
+        } catch (error) {
+            loading.innerText = "❌ 連線失敗，請檢查 API 權限或網路。";
+            console.error("API Error:", error);
         }
-    }
-
-    /* ----------------------------------------------------------------
-       3. 導航跳轉函數
-       ---------------------------------------------------------------- */
-    function goToSutra() {
-        alert("儀式啟動：正在為您展開《教養幸福經》卷軸...");
-        // 實作：跳轉回 Index.html 並觸發館藏展開 JS
-    }
-
-    function goToGallery() {
-        const id = document.getElementById('navBtn').getAttribute('data-target');
-        alert(`導航啟動：即將帶您前往目標展覽，定位 ID: ${id}`);
-        // 實作：換頁並自動滾動至對應元件
-    }
-
-    function downloadTool() {
-        alert("🌸 幸福工具已準備就緒，正在下載至您的 PWA 裝置...");
     }
 </script>
 
