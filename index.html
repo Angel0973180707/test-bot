@@ -9,131 +9,210 @@
             --angel-pink: #ffb6c1;
             --deep-pink: #d63384;
             --soft-bg: #fff5f7;
-            --text-gray: #555;
-            --glass-white: rgba(255, 255, 255, 0.9);
+            --glass-white: rgba(255, 255, 255, 0.95);
+            --text-main: #5a5a5a;
         }
 
         body {
             font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
             background-color: var(--soft-bg);
-            color: var(--text-gray);
+            background-image: radial-gradient(var(--angel-pink) 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+            color: var(--text-main);
             margin: 0;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
             padding: 20px;
         }
 
-        .mastermind-card {
+        /* 完整架構容器 */
+        .container {
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
             background: var(--glass-white);
-            border-radius: 30px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.2);
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(255, 182, 193, 0.3);
             border: 1px solid white;
+            display: flex;
+            flex-direction: column;
         }
 
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { color: var(--deep-pink); margin: 0; font-size: 1.5rem; letter-spacing: 2px; }
-        .header p { font-size: 0.8rem; color: #999; margin-top: 5px; }
+        /* 頂部導航 */
+        .nav-tabs {
+            display: flex;
+            background: #fff;
+            padding: 15px 10px;
+            justify-content: space-around;
+            border-bottom: 1px solid #f0f0f0;
+        }
 
-        .search-area {
-            position: relative;
+        .nav-item {
+            font-size: 0.85rem;
+            color: #999;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .nav-item.active {
+            color: var(--deep-pink);
+            background: #fff0f3;
+            font-weight: bold;
+        }
+
+        /* 主內容區 */
+        .main-content {
+            padding: 30px 25px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: var(--deep-pink);
+            font-size: 1.6rem;
+            margin: 0;
+            letter-spacing: 3px;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        /* 智多星核心搜尋區 */
+        .mastermind-box {
+            background: #fff;
+            border-radius: 25px;
+            padding: 5px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: flex;
             margin-bottom: 25px;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px 20px;
             border: 2px solid var(--angel-pink);
-            border-radius: 50px;
-            box-sizing: border-box;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-            background: white;
         }
 
-        input:focus { border-color: var(--deep-pink); }
+        .mastermind-box input {
+            flex: 1;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+        }
 
         .ask-btn {
-            position: absolute;
-            right: 5px;
-            top: 5px;
             background: var(--deep-pink);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
+            padding: 0 25px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
+            transition: 0.3s;
         }
 
-        #loading { display: none; text-align: center; color: var(--deep-pink); margin-bottom: 15px; font-weight: bold; }
+        .ask-btn:hover { transform: scale(1.05); }
 
-        #response-panel { display: none; animation: slideUp 0.5s ease; }
+        /* 結果顯示區 */
+        #loading { display: none; text-align: center; color: var(--deep-pink); margin: 20px 0; font-weight: bold; }
 
-        .angel-talk-box {
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            border-left: 5px solid var(--deep-pink);
+        #response-panel { display: none; animation: fadeInUp 0.6s ease; }
+
+        .angel-talk {
+            background: #fffafb;
+            padding: 25px;
+            border-radius: 25px;
             line-height: 1.8;
             font-size: 1.05rem;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            border-left: 6px solid var(--deep-pink);
+            margin-bottom: 25px;
+            position: relative;
         }
 
-        .button-group { display: flex; flex-direction: column; gap: 12px; }
+        .angel-talk::after {
+            content: "👼";
+            position: absolute;
+            top: -15px;
+            left: -10px;
+            font-size: 1.5rem;
+        }
+
+        .action-group { display: flex; flex-direction: column; gap: 15px; }
 
         .btn {
-            padding: 15px;
-            border-radius: 15px;
+            padding: 18px;
+            border-radius: 20px;
             text-align: center;
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            border: none;
             cursor: pointer;
             transition: 0.3s;
-            border: none;
         }
 
-        .btn-sutra { background: #fff0f3; color: var(--deep-pink); border: 1px dashed var(--deep-pink); }
-        .btn-nav { background: var(--deep-pink); color: white; box-shadow: 0 8px 20px rgba(214, 51, 132, 0.2); }
+        .btn-nav { background: var(--deep-pink); color: white; box-shadow: 0 10px 20px rgba(214, 51, 132, 0.2); }
+        .btn-sutra { background: white; color: var(--deep-pink); border: 2.5px dashed var(--angel-pink); }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 頁尾 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.75rem;
+            color: #ccc;
         }
     </style>
 </head>
 <body>
 
-<div class="mastermind-card">
-    <div class="header">
-        <h2>👼 幸福智多星</h2>
-        <p>雲端中控室 · 實時智慧導航</p>
+<div class="container">
+    <div class="nav-tabs">
+        <a href="#" class="nav-item">🏠 首頁</a>
+        <a href="#" class="nav-item">💎 館藏</a>
+        <a href="#" class="nav-item active">🧠 智多星</a>
+        <a href="#" class="nav-item">✨ 關於</a>
     </div>
 
-    <div class="search-area">
-        <input type="text" id="userInput" placeholder="輸入煩惱（如：不專心、芒果、生氣）...">
-        <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
-    </div>
-
-    <div id="loading">✨ 小天使笑長正在翻閱雲端經書...</div>
-
-    <div id="response-panel">
-        <div class="angel-talk-box" id="angelVoice"></div>
-        <div class="button-group">
-            <button class="btn btn-sutra" onclick="alert('導航中：教養幸福經全文展廳')">📖 回首頁：教養幸福經全文</button>
-            <button class="btn btn-nav" id="navBtn"></button>
+    <div class="main-content">
+        <div class="header">
+            <h1>幸福智多星</h1>
+            <p>笑長與雲端智慧實時連線</p>
         </div>
+
+        <div class="mastermind-box">
+            <input type="text" id="userInput" placeholder="輸入：被打的芒果、不專心...">
+            <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
+        </div>
+
+        <div id="loading">✨ 小天使正在連線雲端倉庫...</div>
+
+        <div id="response-panel">
+            <div class="angel-talk" id="angelVoice"></div>
+            
+            <div class="action-group">
+                <button class="btn btn-nav" id="navBtn"></button>
+                <button class="btn btn-sutra" onclick="alert('正在為您翻開《教養幸福經》...')">📖 讀讀「教養幸福經」安頓心腦</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 幸福教養概念館 · 退休校長的小天使智慧
     </div>
 </div>
 
 <script>
-    // 笑長最新的 API 網址
-    const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbzeuQFds9g_H5_Wa7CIYSQs5k2KHBdDG45zPNNJF74xPfYU9NkSYXLBSKDZzcCWjaF3OA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzeuQFds9g_H5_Wa7CIYSQs5k2KHBdDG45zPNNJF74xPfYU9NkSYXLBSKDZzcCWjaF3OA/exec";
 
     async function fetchFromCloud() {
         const input = document.getElementById('userInput').value.trim();
@@ -142,50 +221,49 @@
         const voice = document.getElementById('angelVoice');
         const navBtn = document.getElementById('navBtn');
 
-        if (!input) return alert("小天使笑長在聽，請跟我說說您的煩惱...");
+        if (!input) return;
 
         loading.style.display = "block";
         panel.style.display = "none";
 
         try {
-            const response = await fetch(CLOUD_API_URL);
+            const response = await fetch(API_URL);
             const data = await response.json();
             
-            // 對應笑長試算表截圖中的中文欄位名稱
+            // 強化模糊對應邏輯
             const match = data.find(row => {
-                const keys = row["偵測關鍵字（家長的心聲）"] || row["偵測關鍵字"] || row["Keywords"] || "";
-                // 支援逗號、頓號與空格分隔
-                return keys.toString().split(/[、,，\s]+/).some(k => input.includes(k.trim()));
+                let keys = "";
+                for (let k in row) { if (k.includes("關鍵字")) keys = row[k]; }
+                return keys.toString().split(/[、,，\s]+/).some(word => input.includes(word.trim()));
             });
 
             loading.style.display = "none";
             panel.style.display = "block";
 
             if (match) {
-                // 1. 抓取解決方案 (B欄)
-                voice.innerHTML = match["解決方案"] || match["Response"] || "笑長正在為您祈福，這份智慧還在趕來的路上...";
-                
-                // 2. 抓取目標分頁 (D欄)
-                const pageName = match["目標分頁"] || match["Page"] || "幸福展廳";
-                navBtn.innerText = `🎬 前往 ${pageName}`;
-                
-                // 3. 抓取工具素材 (G欄) 或 影片素材1 (H欄)
-                const link = match["工具素材"] || match["影片素材1"] || match["PWALink"] || "";
-                
-                if (link && link.startsWith("http")) {
-                    navBtn.style.display = "block";
-                    navBtn.onclick = () => { window.location.href = link; };
-                } else {
-                    navBtn.innerText = "🎬 內容準備中";
-                    navBtn.onclick = () => { alert("這個內容笑長還在精心準備中，請先讀讀幸福經喔！"); };
+                let reply = "", page = "幸福展廳", link = "";
+                for (let k in match) {
+                    if (k.includes("解決方案") || k.includes("回應")) reply = match[k];
+                    if (k.includes("分頁") || k.includes("目標")) page = match[k];
+                    if (k.includes("素材") || k.includes("工具") || k.includes("網址")) {
+                        if (match[k] && match[k].toString().startsWith("http")) link = match[k];
+                    }
                 }
+
+                voice.innerHTML = reply || "笑長溫柔地聽著，這份智慧還在路上...";
+                navBtn.innerText = `🎬 前往 ${page}`;
+                navBtn.onclick = () => {
+                    if (link) window.location.href = link;
+                    else alert("影片製作中，敬請期待！");
+                };
             } else {
-                voice.innerText = "笑長溫柔地聽著... 這份智慧尚未存入雲端。請試試搜尋「不專心」或「生氣」，或先點開上方【教養幸福經】。";
-                navBtn.style.display = "none";
+                voice.innerText = "笑長溫柔地聽著... 這份心聲尚未存入雲端。請試試搜尋「生氣」或「芒果」測試連線，或先讀讀幸福經。";
+                navBtn.innerText = "🎬 參觀幸福展廳";
+                navBtn.onclick = () => alert("即將導航至全館導覽...");
             }
-        } catch (error) {
-            loading.innerText = "❌ 連線失敗：請確保 API 權限已發佈為「任何人」。";
-            console.error("API Error:", error);
+        } catch (e) {
+            loading.innerText = "❌ 連線不順，請確認 API 權限或網路。";
+            console.error(e);
         }
     }
 </script>
