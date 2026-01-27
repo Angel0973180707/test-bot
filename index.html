@@ -74,35 +74,47 @@
             const response = await fetch(API_URL);
             const data = await response.json();
             
-            // 修正：透過數組索引定位，確保抓到 A 欄 (0) 關鍵字與 B 欄 (1) 解決方案
+            // 找出關鍵字匹配的那一行
             const match = data.find(row => {
-                const values = Object.values(row);
-                const keys = values[0] || ""; 
-                return keys.toString().split(/[、,，\s]+/).some(k => input.includes(k.trim()));
+                const rowValues = Object.values(row).join("");
+                return rowValues.includes(input);
             });
 
             loading.style.display = "none";
             panel.style.display = "block";
 
             if (match) {
+                // 【核心修正】智慧掃描：找出這行裡面字數最長的那一格（就是笑長的長文）
                 const values = Object.values(match);
-                // 讀取 B 欄：解決方案
-                voice.innerText = values[1] || "天使笑長懂您的心，正在為您準備智慧對策。";
-                // 讀取 D 欄：分頁名稱
-                navBtn.innerText = `🎬 前往 ${values[3] || "幸福展廳"}`;
-                // 讀取 G 欄：影片/工具網址
-                const link = values[6] || "";
+                let longestText = "";
+                let targetPage = "幸福展廳";
+                let toolLink = "";
+
+                values.forEach(val => {
+                    const text = val.toString();
+                    // 只要字數超過 10 個字，通常就是解決方案
+                    if (text.length > longestText.length && !text.startsWith("http")) {
+                        longestText = text;
+                    }
+                    // 尋找網址
+                    if (text.startsWith("http")) toolLink = text;
+                    // 尋找分頁名稱 (通常是 2-5 個字)
+                    if (text.includes("展廳") || text.includes("會所") || text.includes("心靈")) targetPage = text;
+                });
+
+                voice.innerText = longestText || "天使笑長懂您的心，正為您準備智慧對策。";
+                navBtn.innerText = `🎬 前往 ${targetPage}`;
                 navBtn.onclick = () => {
-                    if (link.toString().startsWith("http")) window.location.href = link;
+                    if (toolLink) window.location.href = toolLink;
                     else alert("此內容正在趕路中，請先讀讀幸福經喔！");
                 };
             } else {
-                voice.innerText = "笑長溫柔地聽著... 雲端尚未收錄此煩惱。請試試搜尋「愛生氣」來測試連線！";
+                voice.innerText = "笑長溫柔地聽著... 雲端尚未收錄此煩惱。試試搜尋「愛生氣」測試連線！";
                 navBtn.innerText = "🎬 參觀幸福展廳";
-                navBtn.onclick = () => alert("導航至全館展廳...");
+                navBtn.onclick = () => alert("導覽至展廳...");
             }
         } catch (e) {
-            loading.innerText = "❌ 連線不順，請檢查 API 部署權限。";
+            loading.innerText = "❌ 連線不順，請確認 API 權限。";
         }
     }
 </script>
