@@ -3,51 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 診斷修復版</title>
+    <title>幸福教養概念館 - 智多星</title>
     <style>
-        :root { --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7; }
-        body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 480px; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
-        .main-content { padding: 30px 20px; text-align: center; flex: 1; }
-        .search-group { display: flex; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 20px 0; background: #fff; }
-        .search-group input { flex: 1; border: none; padding: 12px; border-radius: 50px; outline: none; font-size: 1rem; }
-        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        #loading { display: none; color: var(--deep-pink); font-weight: bold; margin: 20px; }
-        #response-panel { display: none; text-align: left; padding: 10px; }
-        .angel-talk { 
-            background: #fffafb; padding: 25px; border-radius: 20px; border-left: 8px solid var(--deep-pink); 
-            line-height: 2; font-size: 1.1rem; text-align: justify; text-justify: inter-ideograph; white-space: pre-wrap;
+        :root {
+            --angel-pink: #ffb6c1;
+            --deep-pink: #d63384;
+            --soft-bg: #fff5f7;
+            --science-blue: #e7f3ff;
+            --science-border: #007bff;
+            --heart-pink: #fff0f3;
+            --heart-border: #ffb6c1;
+            --practice-green: #f1f8e9;
+            --practice-border: #8bc34a;
         }
-        .btn-nav { background: var(--deep-pink); color: white; width: 100%; padding: 15px; border-radius: 15px; border: none; font-weight: bold; margin-top: 15px; cursor: pointer; }
-        /* 偵錯視窗 */
-        #debug-log { background: #333; color: #0f0; font-family: monospace; font-size: 10px; padding: 10px; margin: 10px; border-radius: 5px; display: none; text-align: left; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 480px; background: white; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+
+        /* 導覽 */
+        .nav-tabs { display: flex; background: #fff; padding: 15px 5px; justify-content: space-around; border-bottom: 1px solid #eee; }
+        .nav-item { text-align: center; color: #888; font-size: 0.8rem; flex: 1; cursor: pointer; }
+        .nav-item.active { color: var(--deep-pink); font-weight: bold; }
+
+        .main-content { padding: 30px 20px; flex: 1; text-align: center; }
+        .header h1 { color: var(--deep-pink); font-size: 1.8rem; margin: 0; letter-spacing: 2px; }
+
+        /* 搜尋區 */
+        .search-group { display: flex; background: #fff; border: 2px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 25px 0; box-shadow: 0 4px 15px rgba(255,182,193,0.2); }
+        .search-group input { flex: 1; border: none; padding: 12px 15px; border-radius: 50px; outline: none; font-size: 1rem; width: 100%; }
+        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+
+        /* 狀態提示 */
+        #loading { display: none; color: var(--deep-pink); margin: 20px 0; font-weight: bold; font-size: 1.1rem; letter-spacing: 2px; animation: pulse 1.5s infinite; }
+
+        /* 結果面板 */
+        #response-panel { display: none; animation: fadeIn 0.5s ease; text-align: left; }
+
+        /* 智慧引導 */
+        .guide-box { padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; line-height: 1.6; text-align: justify; }
+        .guide-science { background: var(--science-blue); border-left: 5px solid var(--science-border); }
+        .guide-heart { background: var(--heart-pink); border-left: 5px solid var(--heart-border); }
+        .guide-practice { background: var(--practice-green); border-left: 5px solid var(--practice-border); }
+
+        /* 幸福錦囊本文 - 斷字工整 */
+        .angel-talk { 
+            background: #fffafb; padding: 25px; border-radius: 20px; border-left: 6px solid var(--deep-pink); 
+            line-height: 2.0; color: #444; font-size: 1.1rem; white-space: pre-wrap; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02); 
+            text-align: justify; text-justify: inter-ideograph; letter-spacing: 0.05rem;
+        }
+
+        /* 按鈕 */
+        .btn-group { display: flex; flex-direction: column; gap: 12px; }
+        .btn { padding: 15px; border-radius: 15px; text-align: center; text-decoration: none; font-weight: bold; border: none; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+        .btn-nav { background: var(--deep-pink); color: white; }
+        .btn-sutra { background: #fff; color: var(--deep-pink); border: 2px dashed var(--angel-pink); }
+
+        .footer { text-align: center; padding: 40px 20px; font-size: 0.85rem; color: #999; line-height: 1.8; border-top: 1px solid #f9f9f9; background: #fafafa; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="nav-tabs">
+        <div class="nav-item">🏠<br>首頁</div>
+        <div class="nav-item">💎<br>館藏</div>
+        <div class="nav-item active">🧠<br>智多星</div>
+        <div class="nav-item">✨<br>關於</div>
+    </div>
+
     <div class="main-content">
-        <h1>幸福智多星</h1>
+        <div class="header">
+            <h1>幸福智多星</h1>
+            <p style="color: #888; margin-top: 8px;">智慧心法 · 即時指引</p>
+        </div>
+
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="輸入關鍵字測試（如：生氣）">
+            <input type="text" id="userInput" placeholder="輸入：生氣、吼叫、手足衝突...">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
+
         <div id="loading">🔮 智多星思考中...</div>
-        <div id="debug-log"></div>
+
         <div id="response-panel">
-            <div class="angel-talk" id="angelVoice"></div>
-            <button class="btn-nav" id="navBtn">🎬 領取方案</button>
+            <div id="guideArea"></div> 
+            <div class="angel-talk" id="angelVoice"></div> 
+            <div class="btn-group">
+                <button class="btn btn-nav" id="navBtn">🎬 領取幸福錦囊方案</button>
+                <button class="btn btn-sutra" onclick="location.href='#'">📖 閱讀「幸福教養經」全文</button>
+            </div>
         </div>
+    </div>
+
+    <div class="footer">
+        © 2026 幸福教養概念館<br>
+        小天使是退休國小教師，也是笑口常開的「笑長」<br>
+        致力結合心腦科學實踐，讓愛發揮力量
     </div>
 </div>
 
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzeuQFds9g_H5_Wa7CIYSQs5k2KHBdDG45zPNNJF74xPfYU9NkSYXLBSKDZzcCWjaF3OA/exec";
 
-    function logDebug(msg) {
-        const log = document.getElementById('debug-log');
-        log.style.display = "block";
-        log.innerHTML += "> " + msg + "<br>";
+    function getGuide(cat, text) {
+        const full = (cat + text).toLowerCase();
+        if (full.includes("腦科學") || full.includes("大腦")) {
+            return `<div class="guide-box guide-science"><strong>🧠 智多星・科學引導：</strong><br>這是大腦杏仁核在叫，還是理性的我在說話？練習用感恩重塑大腦，讓理性空間跑出來。</div>`;
+        } else if (full.includes("心靈") || full.includes("感恩")) {
+            return `<div class="guide-box guide-heart"><strong>🧠 智多星・心靈引導：</strong><br>所有的逆境，都是在幫助我們練習幸福的心境。這是在轉境，還是在轉心？</div>`;
+        } else {
+            return `<div class="guide-box guide-practice"><strong>🧠 智多星・實踐引導：</strong><br>理解且有方法的智慧是大愛。這是在控制孩子，還是在引導孩子？</div>`;
+        }
     }
 
     async function fetchFromCloud() {
@@ -55,50 +123,48 @@
         const loading = document.getElementById('loading');
         const panel = document.getElementById('response-panel');
         const voice = document.getElementById('angelVoice');
-        const log = document.getElementById('debug-log');
-        
+        const guideArea = document.getElementById('guideArea');
+        const navBtn = document.getElementById('navBtn');
+
         if (!input) return;
         loading.style.display = "block";
         panel.style.display = "none";
-        log.innerHTML = ""; // 清空偵錯
 
         try {
-            logDebug("嘗試連線 API...");
             const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
-            logDebug("連線回應狀態: " + response.status);
+            const data = await response.json();
             
-            const textData = await response.text();
-            logDebug("原始資料長度: " + textData.length);
-            
-            const data = JSON.parse(textData);
-            logDebug("JSON 解析成功，共有 " + data.length + " 筆資料");
-
-            const match = data.find(row => {
-                return Object.values(row).some(val => 
-                    val.toString().toLowerCase().includes(input.toLowerCase())
-                );
-            });
+            // 搜尋：只要這一列任何地方有這個字就抓
+            const match = data.find(row => Object.values(row).some(v => v.toString().includes(input)));
 
             loading.style.display = "none";
+            panel.style.display = "block";
+
             if (match) {
-                logDebug("匹配成功！");
-                panel.style.display = "block";
-                const values = Object.values(match);
-                // 強制抓取：解決方案(1), 分類(3), 連結(6)
-                voice.innerText = values[1] || "無錦囊內容";
-                const link = values[6] || "";
-                document.getElementById('navBtn').onclick = () => {
-                    if(link) window.location.href = link;
-                    else alert("此方案影片籌備中！");
-                };
+                // 自動偵測欄位：不論名稱，按位置抓取
+                const vals = Object.values(match);
+                const solution = vals[1] || "錦囊內容整理中..."; // 第二欄
+                const category = vals[3] || "幸福錦囊";           // 第四欄
+                const link = vals[6] || "";                       // 第七欄
+
+                guideArea.innerHTML = getGuide(category, solution);
+                voice.innerText = solution;
+
+                // 2. 領取影片與工具
+                if (link && link.startsWith("http")) {
+                    navBtn.innerText = `🎬 領取：影片與幸福工具`;
+                    navBtn.onclick = () => window.location.href = link;
+                } else {
+                    navBtn.innerText = `🎬 前往「${category}」探索更多`;
+                    navBtn.onclick = () => alert("專屬影片與工具籌備中！");
+                }
             } else {
-                logDebug("搜尋不到關鍵字: " + input);
-                panel.style.display = "block";
-                voice.innerText = "智多星找不到這個關鍵字，請試試輸入「生氣」。";
+                guideArea.innerHTML = "";
+                voice.innerText = "智多星思考後發現... 目前尚未收錄此關鍵字。您可以試試輸入「生氣」、「自責」或「孩子慢」。";
+                navBtn.innerText = "🎬 參觀幸福全館";
             }
         } catch (e) {
-            logDebug("發生錯誤: " + e.message);
-            loading.innerText = "❌ 連線失敗，請檢查 API。";
+            loading.innerText = "❌ 智多星連線中斷，請確認 API 權限。";
         }
     }
 </script>
