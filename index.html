@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 全能導覽版</title>
+    <title>幸福智多星 - 情境導引版</title>
     <style>
         :root {
             --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7;
@@ -13,27 +13,26 @@
         .container { width: 100%; max-width: 480px; background: white; display: flex; flex-direction: column; box-shadow: 0 0 25px rgba(0,0,0,0.06); }
         .main-content { padding: 30px 22px; flex: 1; text-align: center; }
         
-        /* 搜尋區 */
         .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 20px 0 15px 0; }
         .search-group input { flex: 1; border: none; padding: 12px 18px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100%; }
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
 
-        /* 分類推薦區 */
-        .category-title { font-size: 0.85rem; color: #999; margin: 15px 0 8px; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 5px; text-align: left; }
-        .suggest-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-start; margin-bottom: 5px; }
-        .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+        /* 移除展廳名，改用生活化情境 */
+        .category-title { font-size: 0.95rem; color: #666; margin: 18px 0 10px; font-weight: bold; display: flex; align-items: center; }
+        .category-title::before { content: ""; display: inline-block; width: 4px; height: 16px; background: var(--deep-pink); margin-right: 8px; border-radius: 2px; }
+        
+        .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; margin-bottom: 5px; }
+        .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 7px 15px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
         .tag:hover { background: var(--angel-pink); color: white; }
 
-        #loading { display: none; color: var(--deep-pink); margin: 20px 0; font-weight: bold; animation: pulse 1.5s infinite; }
-        #response-panel { display: none; animation: fadeIn 0.7s ease; text-align: left; margin-top: 20px;}
+        #loading { display: none; color: var(--deep-pink); margin: 25px 0; font-weight: bold; animation: pulse 1.5s infinite; }
+        #response-panel { display: none; animation: fadeIn 0.7s ease; text-align: left; margin-top: 25px;}
         
-        /* 錦囊排版 */
         .sutra-header { color: var(--deep-pink); font-weight: bold; margin-bottom: 12px; font-size: 1.25rem; display: flex; align-items: center; }
         .sutra-header::before { content: "🔮"; margin-right: 10px; }
         .angel-talk { 
             background: #fffafb; padding: 25px; border-radius: 20px; border-left: 8px solid var(--deep-pink); 
-            line-height: 2.1; color: #333; font-size: 1.15rem; white-space: pre-wrap; 
-            text-align: justify; text-justify: inter-ideograph;
+            line-height: 2.1; color: #333; font-size: 1.15rem; white-space: pre-wrap; text-align: justify;
         }
         .think-box { background: var(--think-blue); border: 1.5px dashed #2196f3; border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1.05rem; line-height: 1.8; }
         
@@ -42,7 +41,7 @@
         .btn-tool { background: var(--tool-green); color: white; }
         .btn-video { background: var(--video-orange); color: white; }
         
-        .footer { text-align: center; padding: 45px 25px; font-size: 0.85rem; color: #999; border-top: 1px solid #eee; background: #fafafa; }
+        .footer { text-align: center; padding: 45px 25px; font-size: 0.85rem; color: #999; border-top: 1px solid #eee; margin-top: 30px; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
     </style>
@@ -51,39 +50,30 @@
 
 <div class="container">
     <div class="main-content">
-        <h1 style="color: var(--deep-pink); letter-spacing: 3px; margin-bottom: 5px;">幸福智多星</h1>
-        <p style="color: #999; font-size: 0.9rem;">笑長智慧錦囊 · 即時陪伴解決難題</p>
+        <h1 style="color: var(--deep-pink); letter-spacing: 2px; margin-bottom: 5px;">幸福智多星</h1>
+        <p style="color: #999; font-size: 0.9rem;">此刻，智多星最懂您的心</p>
 
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="直接輸入問題（如：生氣）" onkeypress="if(event.keyCode==13) fetchFromCloud()">
+            <input type="text" id="userInput" placeholder="輸入心情或孩子狀況" onkeypress="if(event.keyCode==13) fetchFromCloud()">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
 
-        <div class="category-title">🧠 教養幸福經 (心腦科學)</div>
+        <div class="category-title">💝 大人想緩解...</div>
         <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('愛生氣')"># 孩子愛生氣</div>
-            <div class="tag" onclick="quickSearch('不專心')"># 孩子不專心</div>
+            <div class="tag" onclick="quickSearch('吼叫')"># 我快忍不住吼叫</div>
+            <div class="tag" onclick="quickSearch('挫折')"># 我覺得好挫折</div>
+            <div class="tag" onclick="quickSearch('心累')"># 教養讓我好心累</div>
         </div>
 
-        <div class="category-title">🎬 生命劇場 (情緒調節)</div>
+        <div class="category-title">🎈 當孩子出現...</div>
         <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('吼叫')"># 忍不住吼叫</div>
-            <div class="tag" onclick="quickSearch('失控')"># 當下快失控</div>
+            <div class="tag" onclick="quickSearch('愛生氣')"># 孩子愛發脾氣</div>
+            <div class="tag" onclick="quickSearch('不專心')"># 孩子老是不專心</div>
+            <div class="tag" onclick="quickSearch('飛得慢')"># 孩子像飛得慢的衛星</div>
+            <div class="tag" onclick="quickSearch('不聽話')"># 怎麼說都不聽</div>
         </div>
 
-        <div class="category-title">🛋 關係雅座 (親子對話)</div>
-        <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('不聽話')"># 孩子不聽話</div>
-            <div class="tag" onclick="quickSearch('溝通')"># 說話都沒聽</div>
-        </div>
-
-        <div class="category-title">🎨 實踐工房 (日常練習)</div>
-        <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('飛得慢')"># 飛得慢的衛星</div>
-            <div class="tag" onclick="quickSearch('正能量')"># 日常正能量</div>
-        </div>
-
-        <div id="loading">🔮 智多星思考中...</div>
+        <div id="loading">🔮 智多星搜尋錦囊中...</div>
 
         <div id="response-panel">
             <div class="sutra-header">幸福錦囊智慧引導</div>
@@ -95,7 +85,7 @@
             </div>
         </div>
     </div>
-    <div class="footer">© 2026 幸福教養概念館<br>讓愛發揮力量，笑長伴您與孩子一起成長</div>
+    <div class="footer">© 2026 幸福教養概念館 · 笑長與您同行</div>
 </div>
 
 <script>
@@ -114,22 +104,16 @@
 
         loading.style.display = "block";
         panel.style.display = "none";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         try {
             const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
             const data = await response.json();
             
+            // 精準搜尋優先，後模糊比對
             let match = data.find(row => {
-                const kwArray = row.keywords ? row.keywords.toString().split(/[、,，\s]+/) : [];
-                return kwArray.some(k => k === input); 
+                const kwArray = row.keywords ? row.keywords.toString().split(/[、,，\s#]+/) : [];
+                return kwArray.some(k => k === input || input.includes(k)); 
             });
-            if (!match) {
-                match = data.find(row => {
-                    const kwArray = row.keywords ? row.keywords.toString().split(/[、,，\s]+/) : [];
-                    return kwArray.some(k => input.includes(k));
-                });
-            }
 
             loading.style.display = "none";
             panel.style.display = "block";
@@ -155,7 +139,7 @@
                     videoBtn.onclick = () => window.location.href = match.video1;
                 } else { videoBtn.style.display = "none"; }
             } else {
-                document.getElementById('angelVoice').innerText = "智多星正加速學習中... 目前尚未收錄「" + input + "」。歡迎點擊上方標籤，或留言告訴笑長！";
+                document.getElementById('angelVoice').innerText = "智多星正加速學習中... 目前尚未收錄關於「" + input + "」的錦囊。您可以試試點擊上方標籤！";
                 document.getElementById('thinkArea').style.display = "none";
                 document.getElementById('toolBtn').style.display = "none";
                 document.getElementById('videoBtn').style.display = "none";
