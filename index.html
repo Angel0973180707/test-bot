@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 雙效方案強化版</title>
+    <title>幸福智多星 - 思考優化版</title>
     <style>
         :root {
             --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7;
@@ -14,37 +14,35 @@
         .container { width: 100%; max-width: 480px; background: white; box-shadow: 0 0 30px rgba(0,0,0,0.08); }
         .main-content { padding: 25px 20px; text-align: center; }
         
-        /* 標題與搜尋 */
-        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 15px 0 10px 0; }
+        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin-bottom: 20px; }
         .search-group input { flex: 1; border: none; padding: 12px 18px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100%; }
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 22px; border-radius: 50px; cursor: pointer; font-weight: bold; }
         
-        /* 智慧提問分類 */
         .category-title { font-size: 0.95rem; color: #d63384; margin: 18px 0 8px; font-weight: bold; text-align: left; display: flex; align-items: center; }
         .category-title::before { content: "✨"; margin-right: 8px; }
         .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; margin-bottom: 5px; }
-        .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
-        .tag:hover { background: var(--angel-pink); color: white; }
+        .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; }
 
-        /* 回應面板 */
+        #loading { display: none; margin: 30px 0; color: var(--deep-pink); font-weight: bold; animation: pulse 1.5s infinite; }
         #response-panel { display: none; text-align: left; margin-top: 25px; animation: fadeIn 0.6s ease; }
+        
         .angel-talk { 
             background: #fffafb; padding: 22px; border-radius: 18px; border-left: 8px solid var(--deep-pink); 
-            line-height: 1.9; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            line-height: 1.9; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 20px;
         }
 
-        /* 雙影片按鈕 */
         .video-box { margin-top: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .btn-v { padding: 18px; border-radius: 18px; text-decoration: none; font-weight: bold; font-size: 1.05rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-v { padding: 18px; border-radius: 18px; text-decoration: none; font-weight: bold; font-size: 1.05rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; }
         .btn-soul { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
         .btn-edu { background: linear-gradient(135deg, #ff8a65, #e64a19); }
         
-        .btn-tool { background: var(--tool-green); color: white; padding: 16px; border-radius: 18px; text-align: center; font-weight: bold; margin-top: 15px; cursor: pointer; border: none; width: 100%; font-size: 1.05rem; }
+        .btn-tool { background: var(--tool-green); color: white; padding: 16px; border-radius: 18px; text-align: center; font-weight: bold; margin-top: 15px; cursor: pointer; border: none; width: 100%; }
 
-        .think-box { background: var(--think-blue); border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1rem; line-height: 1.8; color: #1565c0; border: 1px dashed #2196f3; position: relative; }
-        .think-box b { display: block; margin-bottom: 8px; color: #0d47a1; font-size: 1.1rem; }
+        .think-box { background: var(--think-blue); border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1rem; line-height: 1.8; color: #1565c0; border: 1px dashed #2196f3; }
+        .think-box b { display: block; margin-bottom: 8px; color: #0d47a1; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
     </style>
 </head>
 <body>
@@ -76,23 +74,19 @@
             <div class="tag" onclick="quickSearch('抱怨')">#孩子抱怨</div>
         </div>
 
-        <div id="loading" style="display:none; margin:30px; color:var(--deep-pink); font-weight:bold;">🔮 正在讀取雙效方案...</div>
+        <div id="loading">🔮 智多星思考中...</div>
 
         <div id="response-panel">
             <div id="resTitle" style="font-weight:bold; font-size:1.2rem; color:var(--deep-pink); margin-bottom:15px; text-align:center;">✨ 智多星雙效處方箋</div>
-            
             <div class="angel-talk" id="guidanceBox"></div> 
-
             <div class="video-box">
                 <button id="vBtn1" class="btn-v btn-soul" style="display:none;"></button>
                 <button id="vBtn2" class="btn-v btn-edu" style="display:none;"></button>
             </div>
-
             <div id="thinkArea" class="think-box" style="display:none;">
                 <b>💡 課題分離 ‧ 轉念思考</b>
                 <span id="reflectionBox"></span>
             </div>
-
             <button id="toolBtn" class="btn-tool" style="display:none;"></button>
         </div>
     </div>
@@ -110,20 +104,27 @@
         const input = document.getElementById('userInput').value.trim();
         if (!input) return;
 
-        document.getElementById('loading').style.display = "block";
-        document.getElementById('response-panel').style.display = "none";
+        const loading = document.getElementById('loading');
+        const panel = document.getElementById('response-panel');
+        
+        loading.style.display = "block";
+        panel.style.display = "none";
 
         try {
             const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
             const result = await response.json();
             const data = result.data || result;
             
-            // 模糊搜尋 A 欄關鍵字
-            const match = data.find(row => (row.keywords || "").toString().includes(input));
+            // 強化比對邏輯：只要關鍵字(A欄)包含輸入值，就視為匹配
+            const match = data.find(row => {
+                const kw = (row.keywords || "").toString();
+                return kw.toLowerCase().includes(input.toLowerCase()) || input.toLowerCase().includes(kw.toLowerCase());
+            });
 
-            document.getElementById('loading').style.display = "none";
+            loading.style.display = "none";
+
             if (match) {
-                document.getElementById('response-panel').style.display = "block";
+                panel.style.display = "block";
                 document.getElementById('guidanceBox').innerText = match.guidance || "";
 
                 // 影片 1 (H 欄): 心靈會所
@@ -142,14 +143,12 @@
                     v2.onclick = () => window.location.href = match.video2;
                 } else { v2.style.display = "none"; }
 
-                // 思考 (J 欄)
                 const thinkArea = document.getElementById('thinkArea');
                 if (match.reflection) {
                     thinkArea.style.display = "block";
                     document.getElementById('reflectionBox').innerText = match.reflection;
                 } else { thinkArea.style.display = "none"; }
 
-                // 工具 (G 欄)
                 const tBtn = document.getElementById('toolBtn');
                 if (match.toolUrl) {
                     tBtn.style.display = "block";
@@ -157,9 +156,13 @@
                     tBtn.onclick = () => window.location.href = match.toolUrl;
                 } else { tBtn.style.display = "none"; }
                 
-                window.scrollTo({ top: panel.offsetTop, behavior: 'smooth' });
+                window.scrollTo({ top: panel.offsetTop - 20, behavior: 'smooth' });
+            } else {
+                alert("智多星目前尚未收錄「" + input + "」的相關方案。");
             }
-        } catch (e) { alert("讀取失敗"); }
+        } catch (e) { 
+            loading.innerText = "❌ 連線異常，請稍後再試。";
+        }
     }
 </script>
 </body>
