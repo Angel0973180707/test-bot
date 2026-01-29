@@ -3,136 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 形象大使動畫版</title>
+    <title>幸福智多星</title>
     <style>
         :root {
             --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7;
             --think-blue: #e3f2fd; --tool-green: #8bc34a; 
-            --soul-purple: #9c27b0; --edu-orange: #ff7043;
         }
-        body { 
-            font-family: "Microsoft JhengHei", sans-serif; 
-            background-color: var(--soft-bg); 
-            margin: 0; 
+        body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        
+        /* 形象大使精緻化 */
+        .header-section { 
+            padding: 20px; 
             display: flex; 
-            justify-content: center; 
-            min-height: 100vh; 
-            overflow-x: hidden; /* 防止橫向滾動 */
+            align-items: center; 
+            gap: 15px; 
+            background: linear-gradient(to bottom, #fff0f3, #ffffff);
         }
-        .container { 
-            width: 100%; 
-            max-width: 480px; 
-            background: white; 
-            box-shadow: 0 0 30px rgba(0,0,0,0.08); 
-            padding-bottom: 30px; /* 增加底部空間 */
+        .ambassador-mini { 
+            width: 80px; height: 80px; 
+            border-radius: 50%; 
+            border: 3px solid white; 
+            box-shadow: 0 4px 10px rgba(214,51,132,0.2);
+            overflow: hidden;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .main-content { padding: 25px 20px; text-align: center; }
+        .ambassador-mini img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* 形象大使區塊 */
-        .ambassador-section {
-            padding: 0; /* 讓圖片緊貼邊緣 */
-            margin-bottom: 25px; /* 與下方內容保持距離 */
-            opacity: 0; /* 初始隱藏，用於動畫 */
-            animation: fadeIn 1s ease-out forwards; /* 淡入動畫 */
-            animation-delay: 0.3s; /* 稍微延遲出現 */
-        }
-        .ambassador-section img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-bottom-left-radius: 20px; /* 圖片底部圓角 */
-            border-bottom-right-radius: 20px; /* 圖片底部圓角 */
-            box-shadow: 0 8px 20px rgba(214, 51, 132, 0.25); /* 柔和陰影 */
-        }
+        .header-text { text-align: left; }
+        .header-text h2 { margin: 0; color: var(--deep-pink); font-size: 1.4rem; }
+        .header-text p { margin: 2px 0 0; color: #888; font-size: 0.85rem; }
 
-        h2 { color: var(--deep-pink); margin-top: 15px; margin-bottom: 5px; }
-        p.subtitle { color: #888; margin-top: 0; font-size: 0.9rem; }
+        .main-content { padding: 0 20px 30px; }
         
-        /* 搜尋框樣式 */
-        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 15px 0 10px 0; }
-        .search-group input { flex: 1; border: none; padding: 12px 18px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100%; }
-        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 22px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        /* 搜尋與提示區 */
+        .search-group { display: flex; background: #fff; border: 2px solid var(--angel-pink); border-radius: 50px; padding: 4px; margin: 10px 0; }
+        .search-group input { flex: 1; border: none; padding: 10px 15px; border-radius: 50px; outline: none; font-size: 1rem; }
+        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; }
         
-        .category-title { font-size: 0.95rem; color: #d63384; margin: 18px 0 8px; font-weight: bold; text-align: left; display: flex; align-items: center; }
-        .category-title::before { content: "✨"; margin-right: 8px; }
-        .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; margin-bottom: 25px; }
-        .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; transition: background-color 0.2s, color 0.2s; }
-        .tag:hover { background-color: var(--angel-pink); color: white; }
-
-        #loading { display: none; margin: 30px 0; color: var(--deep-pink); font-weight: bold; animation: pulse 1.5s infinite; }
+        .category-title { font-size: 0.9rem; color: var(--deep-pink); margin: 15px 0 8px; font-weight: bold; display: flex; align-items: center; }
+        .category-title::before { content: "✨"; margin-right: 5px; }
         
-        /* 答案顯示面板 */
-        #response-panel { 
-            display: none; /* 初始隱藏，有結果才顯示 */
-            text-align: left; 
-            margin-top: 25px; 
-            animation: fadeIn 0.6s ease; 
-            border-top: 1px dashed var(--angel-pink);
-            padding-top: 25px;
-        }
+        .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        .tag { background: white; border: 1px solid var(--angel-pink); color: var(--deep-pink); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+        .tag:hover { background: var(--angel-pink); color: white; }
 
-        .angel-talk { 
-            background: #fffafb; padding: 22px; border-radius: 18px; border-left: 8px solid var(--deep-pink); 
-            line-height: 1.9; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 20px;
-        }
-
-        .video-box { margin-top: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .btn-v { padding: 18px; border-radius: 18px; text-decoration: none; font-weight: bold; font-size: 1.05rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; transition: 0.3s; }
+        #loading { display: none; text-align: center; margin: 20px 0; color: var(--deep-pink); font-weight: bold; }
+        
+        /* 智慧提示結果區 */
+        #response-panel { display: none; animation: fadeIn 0.5s ease; }
+        .angel-talk { background: #fffafb; padding: 18px; border-radius: 15px; border-left: 5px solid var(--deep-pink); line-height: 1.7; color: #444; font-size: 1rem; margin-bottom: 15px; }
+        
+        .btn-v { width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-soul { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
         .btn-edu { background: linear-gradient(135deg, #ff8a65, #e64a19); }
-        .btn-v:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        
-        .btn-tool { background: var(--tool-green); color: white; padding: 16px; border-radius: 18px; text-align: center; font-weight: bold; margin-top: 15px; cursor: pointer; border: none; width: 100%; font-size: 1.05rem; transition: 0.3s; }
-        .btn-tool:hover { background: #689f38; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn-tool { background: var(--tool-green); color: white; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; border: none; margin-top: 10px; }
 
-        .think-box { background: var(--think-blue); border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1rem; line-height: 1.8; color: #1565c0; border: 1px dashed #2196f3; }
-        .think-box b { display: block; margin-bottom: 8px; color: #0d47a1; }
+        .think-box { background: var(--think-blue); border-radius: 15px; padding: 15px; margin: 20px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.95rem; }
 
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(15px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="ambassador-section">
-        <img src="1769671255343.jpeg" alt="幸福智多星大使" onerror="this.src='1769671255343.jpg'">
+    <div class="header-section">
+        <div class="ambassador-mini">
+            <img src="1769671255343.jpeg" alt="大使" onerror="this.src='1769671255343.jpg'">
+        </div>
+        <div class="header-text">
+            <h2>幸福智多星</h2>
+            <p>形象大使為您導航教養之路</p>
+        </div>
     </div>
 
     <div class="main-content">
-        <h2>幸福智多星</h2>
-        <p class="subtitle">形象大使為您提供專屬教養方案</p>
-        
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="輸入關鍵字（如：芒果、衝突...）">
+            <input type="text" id="userInput" placeholder="輸入您的教養困惑...">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
 
-        <div class="category-title">點擊快速獲取智慧</div>
+        <div class="category-title">大人轉念引導</div>
         <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('芒果')">#被打的芒果</div>
             <div class="tag" onclick="quickSearch('教養衝動')">#教養衝動</div>
-            <div class="tag" onclick="quickSearch('衝突')">#孩子衝突</div>
+            <div class="tag" onclick="quickSearch('教養挫折')">#教養挫折</div>
+            <div class="tag" onclick="quickSearch('芒果')">#被打的芒果</div>
         </div>
 
-        <div id="loading">🔮 智多星思考中...</div>
+        <div class="category-title">孩子行為解方</div>
+        <div class="suggest-tags">
+            <div class="tag" onclick="quickSearch('不專心')">#不專心</div>
+            <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
+            <div class="tag" onclick="quickSearch('衝突')">#同儕衝突</div>
+        </div>
+
+        <div id="loading">✨ 智多星正在調配妙計...</div>
 
         <div id="response-panel">
             <div class="angel-talk" id="guidanceBox"></div> 
-
             <div class="video-box">
                 <button id="vBtn1" class="btn-v btn-soul" style="display:none;"></button>
                 <button id="vBtn2" class="btn-v btn-edu" style="display:none;"></button>
             </div>
-
             <div id="thinkArea" class="think-box" style="display:none;">
-                <b>💡 形象大使的轉念提醒</b>
+                <b>💡 形象大使的轉念提點：</b><br>
                 <span id="reflectionBox"></span>
             </div>
-
             <button id="toolBtn" class="btn-tool" style="display:none;"></button>
         </div>
     </div>
@@ -149,18 +126,15 @@
     async function fetchFromCloud() {
         const input = document.getElementById('userInput').value.trim();
         if (!input) return;
-
         const loading = document.getElementById('loading');
         const panel = document.getElementById('response-panel');
-        
         loading.style.display = "block";
-        panel.style.display = "none"; // 每次搜尋時先隱藏結果面板
+        panel.style.display = "none";
 
         try {
             const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
             const result = await response.json();
             const data = result.data || result;
-            
             const match = data.find(row => {
                 const kw = row.keywords ? row.keywords.toString().toLowerCase() : "";
                 return kw.includes(input.toLowerCase()) || input.toLowerCase().includes(kw);
@@ -168,49 +142,38 @@
 
             loading.style.display = "none";
             if (match) {
-                panel.style.display = "block"; // 顯示結果面板
+                panel.style.display = "block";
                 document.getElementById('guidanceBox').innerText = match.guidance || "";
-
-                // 處理影片按鈕 1
+                
                 const v1 = document.getElementById('vBtn1');
                 if (match.video1 && match.video1.startsWith("http")) {
-                    v1.style.display = "flex";
-                    v1.innerHTML = `🎬 觀看方案 (一)`;
+                    v1.style.display = "flex"; v1.innerHTML = "🎬 觀看專屬方案 (一)";
                     v1.onclick = () => window.location.href = match.video1;
                 } else { v1.style.display = "none"; }
 
-                // 處理影片按鈕 2
                 const v2 = document.getElementById('vBtn2');
                 if (match.video2 && match.video2.startsWith("http")) {
-                    v2.style.display = "flex";
-                    v2.innerHTML = `🎬 觀看方案 (二)`;
+                    v2.style.display = "flex"; v2.innerHTML = "🎬 觀看專屬方案 (二)";
                     v2.onclick = () => window.location.href = match.video2;
                 } else { v2.style.display = "none"; }
 
-                // 轉念思考區
                 const thinkArea = document.getElementById('thinkArea');
                 if (match.reflection) {
                     thinkArea.style.display = "block";
                     document.getElementById('reflectionBox').innerText = match.reflection;
                 } else { thinkArea.style.display = "none"; }
 
-                // 工具按鈕
                 const tBtn = document.getElementById('toolBtn');
                 if (match.toolUrl) {
                     tBtn.style.display = "block";
-                    tBtn.innerText = `🛠 領取：${match.toolName || "幸福工具"}`;
+                    tBtn.innerText = `🛠 領取工具：${match.toolName || "幸福教養包"}`;
                     tBtn.onclick = () => window.location.href = match.toolUrl;
                 } else { tBtn.style.display = "none"; }
                 
-                window.scrollTo({ top: panel.offsetTop - 20, behavior: 'smooth' });
-            } else {
-                alert("形象大使正在為您準備方案，請嘗試搜尋其他關鍵字。");
-            }
-        } catch (e) {
-            loading.innerText = "❌ 無法讀取雲端資料。";
-        }
+                window.scrollTo({ top: panel.offsetTop - 50, behavior: 'smooth' });
+            } else { alert("大使正在構思中，請換個關鍵字試試！"); }
+        } catch (e) { loading.innerText = "❌ 連線失敗"; }
     }
 </script>
-
 </body>
 </html>
