@@ -3,47 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 雙影片方案版</title>
+    <title>幸福智多星 - 雙效方案強化版</title>
     <style>
         :root {
             --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7;
             --think-blue: #e3f2fd; --tool-green: #8bc34a; 
-            --soul-purple: #9c27b0; --edu-orange: #ff7043; /* 心靈紫色、教養橘色 */
+            --soul-purple: #9c27b0; --edu-orange: #ff7043;
         }
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 480px; background: white; box-shadow: 0 0 30px rgba(0,0,0,0.08); }
-        .main-content { padding: 30px 22px; text-align: center; }
+        .main-content { padding: 25px 20px; text-align: center; }
         
-        /* 搜尋與標籤 */
-        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin-bottom: 20px; }
-        .search-group input { flex: 1; border: none; padding: 12px 18px; border-radius: 50px; outline: none; font-size: 1.1rem; }
-        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        /* 標題與搜尋 */
+        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 15px 0 10px 0; }
+        .search-group input { flex: 1; border: none; padding: 12px 18px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100%; }
+        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 22px; border-radius: 50px; cursor: pointer; font-weight: bold; }
         
-        .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 7px 15px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; display: inline-block; margin: 4px; }
+        /* 智慧提問分類 */
+        .category-title { font-size: 0.95rem; color: #d63384; margin: 18px 0 8px; font-weight: bold; text-align: left; display: flex; align-items: center; }
+        .category-title::before { content: "✨"; margin-right: 8px; }
+        .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; margin-bottom: 5px; }
+        .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+        .tag:hover { background: var(--angel-pink); color: white; }
 
-        /* 結果面板 */
+        /* 回應面板 */
         #response-panel { display: none; text-align: left; margin-top: 25px; animation: fadeIn 0.6s ease; }
-        
-        /* 方案文字 (B欄) */
         .angel-talk { 
             background: #fffafb; padding: 22px; border-radius: 18px; border-left: 8px solid var(--deep-pink); 
-            line-height: 1.9; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 20px;
+            line-height: 1.9; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
-        /* 雙影片按鈕區 (H、I欄) */
-        .video-box { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .btn-v { padding: 16px; border-radius: 15px; text-decoration: none; font-weight: bold; font-size: 1.05rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; transition: 0.3s; }
+        /* 雙影片按鈕 */
+        .video-box { margin-top: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .btn-v { padding: 18px; border-radius: 18px; text-decoration: none; font-weight: bold; font-size: 1.05rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-soul { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
+        .btn-edu { background: linear-gradient(135deg, #ff8a65, #e64a19); }
         
-        /* 不同框架顏色分辨 */
-        .btn-soul { background: linear-gradient(135deg, #ab47bc, #7b1fa2); box-shadow: 0 4px 12px rgba(123, 31, 162, 0.2); }
-        .btn-edu { background: linear-gradient(135deg, #ff8a65, #e64a19); box-shadow: 0 4px 12px rgba(230, 74, 25, 0.2); }
-        
-        /* 工具按鈕 (G欄) */
-        .btn-tool { background: var(--tool-green); color: white; padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; margin-top: 15px; cursor: pointer; border: none; display: block; width: 100%; box-sizing: border-box; }
+        .btn-tool { background: var(--tool-green); color: white; padding: 16px; border-radius: 18px; text-align: center; font-weight: bold; margin-top: 15px; cursor: pointer; border: none; width: 100%; font-size: 1.05rem; }
 
-        /* 課題分離 (J欄) */
-        .think-box { background: var(--think-blue); border-radius: 18px; padding: 18px; margin: 20px 0; font-size: 1rem; line-height: 1.7; color: #1565c0; border: 1px dashed #2196f3; }
-        .think-box b { color: #0d47a1; display: block; margin-bottom: 5px; }
+        .think-box { background: var(--think-blue); border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1rem; line-height: 1.8; color: #1565c0; border: 1px dashed #2196f3; position: relative; }
+        .think-box b { display: block; margin-bottom: 8px; color: #0d47a1; font-size: 1.1rem; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -52,24 +51,35 @@
 
 <div class="container">
     <div class="main-content">
-        <h1 style="color: var(--deep-pink); margin-bottom: 5px;">幸福智多星</h1>
-        <p style="color: #888; margin-top: 0; font-size: 0.9rem;">雙效方案：療癒大人，引導小孩</p>
+        <h2 style="color: var(--deep-pink); margin-bottom: 5px;">幸福智多星</h2>
+        <p style="color: #888; margin-top: 0; font-size: 0.9rem;">雙效方案：療癒大人 ‧ 引導小孩</p>
         
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="輸入困擾，如：吼叫">
+            <input type="text" id="userInput" placeholder="輸入關鍵字或點擊下方標籤">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
 
-        <div id="tags-area">
-            <div class="tag" onclick="quickSearch('吼叫')"># 忍不住吼叫</div>
-            <div class="tag" onclick="quickSearch('心累')"># 教養好心累</div>
-            <div class="tag" onclick="quickSearch('頂嘴')"># 孩子愛頂嘴</div>
+        <div class="category-title">大人篇：心靈安定與轉念</div>
+        <div class="suggest-tags">
+            <div class="tag" onclick="quickSearch('教養衝動')">#教養衝動</div>
+            <div class="tag" onclick="quickSearch('教養挫折')">#教養挫折</div>
+            <div class="tag" onclick="quickSearch('教養焦慮')">#教養焦慮</div>
+            <div class="tag" onclick="quickSearch('壓力山大')">#壓力山大</div>
         </div>
 
-        <div id="loading" style="display:none; margin:20px; color:var(--deep-pink);">🔮 正在為您調製雙效方案...</div>
+        <div class="category-title">教養篇：孩子行為與溝通</div>
+        <div class="suggest-tags">
+            <div class="tag" onclick="quickSearch('不專心')">#孩子不專心</div>
+            <div class="tag" onclick="quickSearch('衝突')">#孩子衝突</div>
+            <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
+            <div class="tag" onclick="quickSearch('拒學')">#孩子拒學</div>
+            <div class="tag" onclick="quickSearch('抱怨')">#孩子抱怨</div>
+        </div>
+
+        <div id="loading" style="display:none; margin:30px; color:var(--deep-pink); font-weight:bold;">🔮 正在讀取雙效方案...</div>
 
         <div id="response-panel">
-            <div id="resTitle" style="font-weight:bold; font-size:1.2rem; color:var(--deep-pink); margin-bottom:15px; text-align:center;"></div>
+            <div id="resTitle" style="font-weight:bold; font-size:1.2rem; color:var(--deep-pink); margin-bottom:15px; text-align:center;">✨ 智多星雙效處方箋</div>
             
             <div class="angel-talk" id="guidanceBox"></div> 
 
@@ -79,7 +89,7 @@
             </div>
 
             <div id="thinkArea" class="think-box" style="display:none;">
-                <b>💡 課題分離・轉念思考</b>
+                <b>💡 課題分離 ‧ 轉念思考</b>
                 <span id="reflectionBox"></span>
             </div>
 
@@ -108,12 +118,12 @@
             const result = await response.json();
             const data = result.data || result;
             
+            // 模糊搜尋 A 欄關鍵字
             const match = data.find(row => (row.keywords || "").toString().includes(input));
 
             document.getElementById('loading').style.display = "none";
             if (match) {
                 document.getElementById('response-panel').style.display = "block";
-                document.getElementById('resTitle').innerText = "✨ 智多星雙效處方箋";
                 document.getElementById('guidanceBox').innerText = match.guidance || "";
 
                 // 影片 1 (H 欄): 心靈會所
@@ -128,11 +138,11 @@
                 const v2 = document.getElementById('vBtn2');
                 if (match.video2 && match.video2.startsWith("http")) {
                     v2.style.display = "flex";
-                    v2.innerHTML = "🧸 點我觀看：幸福教養方案";
+                    v2.innerHTML = "🧸 點我觀看：幸福教養影片";
                     v2.onclick = () => window.location.href = match.video2;
                 } else { v2.style.display = "none"; }
 
-                // 課題分離 (J 欄)
+                // 思考 (J 欄)
                 const thinkArea = document.getElementById('thinkArea');
                 if (match.reflection) {
                     thinkArea.style.display = "block";
@@ -146,8 +156,10 @@
                     tBtn.innerText = `🛠 領取：${match.toolName || "幸福工具"}`;
                     tBtn.onclick = () => window.location.href = match.toolUrl;
                 } else { tBtn.style.display = "none"; }
+                
+                window.scrollTo({ top: panel.offsetTop, behavior: 'smooth' });
             }
-        } catch (e) { alert("讀取失敗，請確認 API 狀態"); }
+        } catch (e) { alert("讀取失敗"); }
     }
 </script>
 </body>
