@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 思考優化版</title>
+    <title>幸福智多星 - 思考修正版</title>
     <style>
         :root {
             --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7;
@@ -14,7 +14,7 @@
         .container { width: 100%; max-width: 480px; background: white; box-shadow: 0 0 30px rgba(0,0,0,0.08); }
         .main-content { padding: 25px 20px; text-align: center; }
         
-        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin-bottom: 20px; }
+        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 15px 0 10px 0; }
         .search-group input { flex: 1; border: none; padding: 12px 18px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100%; }
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 22px; border-radius: 50px; cursor: pointer; font-weight: bold; }
         
@@ -32,11 +32,11 @@
         }
 
         .video-box { margin-top: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .btn-v { padding: 18px; border-radius: 18px; text-decoration: none; font-weight: bold; font-size: 1.05rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; }
+        .btn-v { padding: 18px; border-radius: 18px; text-decoration: none; font-weight: bold; font-size: 1.05rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; transition: 0.3s; }
         .btn-soul { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
         .btn-edu { background: linear-gradient(135deg, #ff8a65, #e64a19); }
         
-        .btn-tool { background: var(--tool-green); color: white; padding: 16px; border-radius: 18px; text-align: center; font-weight: bold; margin-top: 15px; cursor: pointer; border: none; width: 100%; }
+        .btn-tool { background: var(--tool-green); color: white; padding: 16px; border-radius: 18px; text-align: center; font-weight: bold; margin-top: 15px; cursor: pointer; border: none; width: 100%; font-size: 1.05rem; }
 
         .think-box { background: var(--think-blue); border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1rem; line-height: 1.8; color: #1565c0; border: 1px dashed #2196f3; }
         .think-box b { display: block; margin-bottom: 8px; color: #0d47a1; }
@@ -53,7 +53,7 @@
         <p style="color: #888; margin-top: 0; font-size: 0.9rem;">雙效方案：療癒大人 ‧ 引導小孩</p>
         
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="輸入關鍵字或點擊下方標籤">
+            <input type="text" id="userInput" placeholder="輸入關鍵字或點擊標籤">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
 
@@ -72,6 +72,7 @@
             <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
             <div class="tag" onclick="quickSearch('拒學')">#孩子拒學</div>
             <div class="tag" onclick="quickSearch('抱怨')">#孩子抱怨</div>
+            <div class="tag" onclick="quickSearch('不合群')">#孩子不合群</div>
         </div>
 
         <div id="loading">🔮 智多星思考中...</div>
@@ -106,28 +107,26 @@
 
         const loading = document.getElementById('loading');
         const panel = document.getElementById('response-panel');
-        
         loading.style.display = "block";
         panel.style.display = "none";
 
         try {
             const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
             const result = await response.json();
+            
+            // 修正 2：加強資料抓取路徑，適應不同 API 結構
             const data = result.data || result;
             
-            // 強化比對邏輯：只要關鍵字(A欄)包含輸入值，就視為匹配
             const match = data.find(row => {
-                const kw = (row.keywords || "").toString();
-                return kw.toLowerCase().includes(input.toLowerCase()) || input.toLowerCase().includes(kw.toLowerCase());
+                const kw = row.keywords ? row.keywords.toString().toLowerCase() : "";
+                return kw.includes(input.toLowerCase()) || input.toLowerCase().includes(kw);
             });
 
             loading.style.display = "none";
-
             if (match) {
                 panel.style.display = "block";
                 document.getElementById('guidanceBox').innerText = match.guidance || "";
 
-                // 影片 1 (H 欄): 心靈會所
                 const v1 = document.getElementById('vBtn1');
                 if (match.video1 && match.video1.startsWith("http")) {
                     v1.style.display = "flex";
@@ -135,7 +134,6 @@
                     v1.onclick = () => window.location.href = match.video1;
                 } else { v1.style.display = "none"; }
 
-                // 影片 2 (I 欄): 幸福教養
                 const v2 = document.getElementById('vBtn2');
                 if (match.video2 && match.video2.startsWith("http")) {
                     v2.style.display = "flex";
@@ -144,13 +142,13 @@
                 } else { v2.style.display = "none"; }
 
                 const thinkArea = document.getElementById('thinkArea');
-                if (match.reflection) {
+                if (match.reflection && match.reflection.trim() !== "") {
                     thinkArea.style.display = "block";
                     document.getElementById('reflectionBox').innerText = match.reflection;
                 } else { thinkArea.style.display = "none"; }
 
                 const tBtn = document.getElementById('toolBtn');
-                if (match.toolUrl) {
+                if (match.toolUrl && match.toolUrl.startsWith("http")) {
                     tBtn.style.display = "block";
                     tBtn.innerText = `🛠 領取：${match.toolName || "幸福工具"}`;
                     tBtn.onclick = () => window.location.href = match.toolUrl;
@@ -158,10 +156,10 @@
                 
                 window.scrollTo({ top: panel.offsetTop - 20, behavior: 'smooth' });
             } else {
-                alert("智多星目前尚未收錄「" + input + "」的相關方案。");
+                alert("智多星目前尚未收錄「" + input + "」的相關方案，請試試其他關鍵字！");
             }
-        } catch (e) { 
-            loading.innerText = "❌ 連線異常，請稍後再試。";
+        } catch (e) {
+            loading.innerText = "❌ 無法連接 API，請確認部署設定。";
         }
     }
 </script>
