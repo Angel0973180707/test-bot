@@ -113,7 +113,7 @@
                 <button id="vBtn2" class="btn-v btn-edu" style="display:none;"></button>
             </div>
             <div id="thinkArea" class="think-box" style="display:none;">
-                <b>💡 形象大使的轉念提點：</b>
+                <b>💡 智多星的轉念提點：</b>
                 <span id="reflectionBox"></span>
             </div>
             <button id="toolBtn" class="btn-tool" style="display:none;"></button>
@@ -153,13 +153,13 @@
                 
                 const v1 = document.getElementById('vBtn1');
                 if (match.video1 && match.video1.startsWith("http")) {
-                    v1.style.display = "flex"; v1.innerHTML = "🎬 觀看療癒方案 (一)";
+                    v1.style.display = "flex"; v1.innerHTML = "🎬 觀看幸福調味方案 (一)";
                     v1.onclick = () => window.location.href = match.video1;
                 } else { v1.style.display = "none"; }
 
                 const v2 = document.getElementById('vBtn2');
                 if (match.video2 && match.video2.startsWith("http")) {
-                    v2.style.display = "flex"; v2.innerHTML = "🎬 觀看引導方案 (二)";
+                    v2.style.display = "flex"; v2.innerHTML = "🎬 觀看幸福調味方案 (二)";
                     v2.onclick = () => window.location.href = match.video2;
                 } else { v2.style.display = "none"; }
 
