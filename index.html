@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 情境精準對接版</title>
+    <title>幸福智多星 - 完整方案版</title>
     <style>
         :root {
             --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7;
@@ -13,30 +13,33 @@
         .container { width: 100%; max-width: 480px; background: white; display: flex; flex-direction: column; box-shadow: 0 0 25px rgba(0,0,0,0.06); }
         .main-content { padding: 30px 22px; flex: 1; text-align: center; }
         
+        /* 搜尋與標籤區 */
         .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 20px 0 15px 0; }
         .search-group input { flex: 1; border: none; padding: 12px 18px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100%; }
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
-
-        /* 分類標籤 */
         .category-title { font-size: 0.95rem; color: #666; margin: 18px 0 10px; font-weight: bold; display: flex; align-items: center; }
         .category-title::before { content: ""; display: inline-block; width: 4px; height: 16px; background: var(--deep-pink); margin-right: 8px; border-radius: 2px; }
-        
         .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; margin-bottom: 5px; }
         .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 7px 15px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-        .tag:hover { background: var(--angel-pink); color: white; }
 
+        /* 結果面板 */
         #loading { display: none; color: var(--deep-pink); margin: 25px 0; font-weight: bold; animation: pulse 1.5s infinite; }
         #response-panel { display: none; animation: fadeIn 0.7s ease; text-align: left; margin-top: 25px;}
         
+        /* 智慧引導 (先安撫) */
         .sutra-header { color: var(--deep-pink); font-weight: bold; margin-bottom: 12px; font-size: 1.2rem; }
         .angel-talk { 
             background: #fffafb; padding: 25px; border-radius: 20px; border-left: 8px solid var(--deep-pink); 
             line-height: 2.1; color: #333; font-size: 1.15rem; white-space: pre-wrap; text-align: justify;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
-        .think-box { background: var(--think-blue); border: 1.5px dashed #2196f3; border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1.05rem; line-height: 1.8; }
-        
+
+        /* 課題分離提問區 */
+        .think-box { background: var(--think-blue); border: 1.5px dashed #2196f3; border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1.05rem; line-height: 1.8; color: #444; }
+
+        /* 雙按鈕群組 */
         .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .btn { padding: 18px; border-radius: 18px; text-align: center; text-decoration: none; font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn { padding: 18px; border-radius: 18px; text-align: center; text-decoration: none; font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-tool { background: var(--tool-green); color: white; }
         .btn-video { background: var(--video-orange); color: white; }
         
@@ -51,38 +54,39 @@
     <div class="main-content">
         <h1 style="color: var(--deep-pink); letter-spacing: 2px;">幸福智多星</h1>
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="點擊下方標籤或輸入問題">
+            <input type="text" id="userInput" placeholder="點擊下方情境或輸入您的困擾">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
 
-        <div class="category-title">💝 大人心情：心靈安定</div>
+        <div class="category-title">💝 大人心情：心靈安定方案</div>
         <div class="suggest-tags">
             <div class="tag" onclick="quickSearch('吼叫')"># 快忍不住吼叫</div>
             <div class="tag" onclick="quickSearch('心累')"># 教養讓我心累</div>
             <div class="tag" onclick="quickSearch('親子關係')"># 修復親子關係</div>
         </div>
 
-        <div class="category-title">🎈 孩子行為：腦科教養</div>
+        <div class="category-title">🎈 孩子行為：腦科教養方案</div>
         <div class="suggest-tags">
             <div class="tag" onclick="quickSearch('衝突')"># 孩子發生衝突</div>
             <div class="tag" onclick="quickSearch('頂嘴')"># 孩子愛頂嘴</div>
             <div class="tag" onclick="quickSearch('不專心')"># 孩子老是不專心</div>
-            <div class="tag" onclick="quickSearch('愛生氣')"># 孩子愛發脾氣</div>
         </div>
 
-        <div id="loading">🔮 智多星搜尋專屬方案...</div>
+        <div id="loading">🔮 智多星正為您調製幸福處方...</div>
 
         <div id="response-panel">
             <div class="sutra-header" id="dynamicTitle">幸福錦囊智慧引導</div>
             <div class="angel-talk" id="angelVoice"></div> 
+            
             <div id="thinkArea" class="think-box" style="display:none;"></div>
+
             <div class="btn-group">
                 <button id="toolBtn" class="btn btn-tool" style="display:none;"></button>
                 <button id="videoBtn" class="btn btn-video" style="display:none;"></button>
             </div>
         </div>
     </div>
-    <div class="footer">© 2026 幸福教養概念館 · 笑長與您同行</div>
+    <div class="footer">© 2026 幸福教養概念館 · 笑長伴您溫柔轉身</div>
 </div>
 
 <script>
@@ -115,39 +119,43 @@
             panel.style.display = "block";
 
             if (match) {
-                // 智慧標題變化
-                const isAdult = ["吼叫","心累","關係"].some(k => input.includes(k));
-                document.getElementById('dynamicTitle').innerText = isAdult ? "✨ 大人情緒安定方案" : "🧬 孩子行為腦科學方案";
+                // 區分心情與行為分類
+                const isAdultMood = ["吼叫","心累","關係","壓力"].some(k => input.includes(k));
+                document.getElementById('dynamicTitle').innerText = isAdultMood ? "✨ 大人情境：溫柔安撫與轉念" : "🧬 孩子情境：腦科學拆解與對策";
                 
+                // 1. 顯示 B欄：安撫與拆解文字
                 document.getElementById('angelVoice').innerText = match.guidance || "";
                 
+                // 2. 顯示 J欄：課題分離提問
                 const thinkArea = document.getElementById('thinkArea');
                 if(match.reflection && match.reflection.trim() !== "") {
                     thinkArea.style.display = "block";
-                    thinkArea.innerHTML = "<strong>💡 思考引導：</strong><br>" + match.reflection;
+                    thinkArea.innerHTML = "<strong>💡 課題分離・轉念提問：</strong><br>" + match.reflection;
                 } else { thinkArea.style.display = "none"; }
 
+                // 3. 顯示 G欄：實踐工具 (綠色按鈕)
                 const toolBtn = document.getElementById('toolBtn');
                 if(match.toolUrl && match.toolUrl.startsWith("http")) {
-                    toolBtn.style.display = "block";
-                    toolBtn.innerText = "🛠 領取：" + (match.toolName || "幸福工具");
+                    toolBtn.style.display = "flex";
+                    toolBtn.innerHTML = `🛠 實踐工具：${match.toolName || "立即領取"}`;
                     toolBtn.onclick = () => window.location.href = match.toolUrl;
                 } else { toolBtn.style.display = "none"; }
 
+                // 4. 顯示 H欄：精華影片 (橘色按鈕)
                 const videoBtn = document.getElementById('videoBtn');
                 if(match.video1 && match.video1.startsWith("http")) {
-                    videoBtn.style.display = "block";
-                    // 根據分類自動切換影片按鈕文字
-                    videoBtn.innerText = isAdult ? "🎬 觀看：心靈感悟影片" : "🎬 觀看：心腦科學解析";
+                    videoBtn.style.display = "flex";
+                    const videoLabel = isAdultMood ? "🎬 觀看：心靈安撫影片" : "🎬 觀看：教養幸福經拆解";
+                    videoBtn.innerHTML = videoLabel;
                     videoBtn.onclick = () => window.location.href = match.video1;
                 } else { videoBtn.style.display = "none"; }
             } else {
-                document.getElementById('angelVoice').innerText = "智多星思考中... 目前尚未收錄關於「" + input + "」的錦囊。您可以試試點擊上方標籤！";
+                document.getElementById('angelVoice').innerText = "智多星正為您尋找最溫柔的回答... 目前尚未收錄關於「" + input + "」的錦囊。建議嘗試上方推薦的情境標籤！";
                 document.getElementById('thinkArea').style.display = "none";
                 document.getElementById('toolBtn').style.display = "none";
                 document.getElementById('videoBtn').style.display = "none";
             }
-        } catch (e) { loading.innerText = "❌ 連線異常"; }
+        } catch (e) { loading.innerText = "❌ 智多星連線忙碌中，請稍後再試。"; }
     }
 </script>
 </body>
