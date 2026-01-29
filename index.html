@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 思考修正版</title>
+    <title>幸福智多星 - 完整架構版</title>
     <style>
         :root {
             --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7;
@@ -70,9 +70,8 @@
             <div class="tag" onclick="quickSearch('不專心')">#孩子不專心</div>
             <div class="tag" onclick="quickSearch('衝突')">#孩子衝突</div>
             <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
-            <div class="tag" onclick="quickSearch('拒學')">#孩子拒學</div>
-            <div class="tag" onclick="quickSearch('抱怨')">#孩子抱怨</div>
             <div class="tag" onclick="quickSearch('不合群')">#孩子不合群</div>
+            <div class="tag" onclick="quickSearch('公主病')">#公主病</div>
         </div>
 
         <div id="loading">🔮 智多星思考中...</div>
@@ -113,8 +112,6 @@
         try {
             const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
             const result = await response.json();
-            
-            // 修正 2：加強資料抓取路徑，適應不同 API 結構
             const data = result.data || result;
             
             const match = data.find(row => {
@@ -127,18 +124,22 @@
                 panel.style.display = "block";
                 document.getElementById('guidanceBox').innerText = match.guidance || "";
 
+                // 處理 D 欄名稱與生命劇場轉譯
+                let rawTarget = match.pageTarget || "相關方案";
+                let displayTarget = rawTarget.includes("生命劇場") ? "幸福教養故事" : rawTarget;
+
                 const v1 = document.getElementById('vBtn1');
                 if (match.video1 && match.video1.startsWith("http")) {
                     v1.style.display = "flex";
-                    v1.innerHTML = "🧘‍♀️ 點我觀看：心靈會所方案";
-                    v1.onclick = () => window.location.href = match.video1;
+                    v1.innerHTML = `🎬 進入：${displayTarget} (一)`;
+                    v1.onclick = () => window.open(match.video1, '_blank');
                 } else { v1.style.display = "none"; }
 
                 const v2 = document.getElementById('vBtn2');
                 if (match.video2 && match.video2.startsWith("http")) {
                     v2.style.display = "flex";
-                    v2.innerHTML = "🧸 點我觀看：幸福教養影片";
-                    v2.onclick = () => window.location.href = match.video2;
+                    v2.innerHTML = `🎬 進入：${displayTarget} (二)`;
+                    v2.onclick = () => window.open(match.video2, '_blank');
                 } else { v2.style.display = "none"; }
 
                 const thinkArea = document.getElementById('thinkArea');
@@ -151,7 +152,7 @@
                 if (match.toolUrl && match.toolUrl.startsWith("http")) {
                     tBtn.style.display = "block";
                     tBtn.innerText = `🛠 領取：${match.toolName || "幸福工具"}`;
-                    tBtn.onclick = () => window.location.href = match.toolUrl;
+                    tBtn.onclick = () => window.open(match.toolUrl, '_blank');
                 } else { tBtn.style.display = "none"; }
                 
                 window.scrollTo({ top: panel.offsetTop - 20, behavior: 'smooth' });
