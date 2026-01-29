@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸福智多星 - 獨立中控版</title>
+    <title>幸福教養概念館 - 智多星最終對接版</title>
     <style>
         :root {
             --angel-pink: #ffb6c1;
             --deep-pink: #d63384;
             --soft-bg: #fff5f7;
             --think-blue: #e3f2fd;
-            --tool-green: #8bc34a;
-            --video-orange: #ff7043;
         }
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 480px; background: white; display: flex; flex-direction: column; box-shadow: 0 0 25px rgba(0,0,0,0.06); }
         .main-content { padding: 30px 22px; flex: 1; text-align: center; }
-        
-        /* 搜尋區塊 */
-        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 25px 0; box-shadow: 0 4px 15px rgba(255,182,193,0.2); }
+        .header h1 { color: var(--deep-pink); letter-spacing: 3px; margin: 0; }
+
+        /* 搜尋區 */
+        .search-group { display: flex; background: #fff; border: 2.5px solid var(--angel-pink); border-radius: 50px; padding: 5px; margin: 25px 0; }
         .search-group input { flex: 1; border: none; padding: 12px 18px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100%; }
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem; }
 
-        /* 智多星思考中動畫 */
-        #loading { display: none; color: var(--deep-pink); margin: 20px 0; font-weight: bold; font-size: 1.1rem; letter-spacing: 2px; animation: pulse 1.5s infinite; }
+        #loading { display: none; color: var(--deep-pink); margin: 20px 0; font-weight: bold; animation: pulse 1.5s infinite; }
 
         /* 結果面板 */
         #response-panel { display: none; animation: fadeIn 0.7s ease; text-align: left; }
 
-        /* 幸福錦囊本文 - 斷字工整 (齊頭尾) */
+        /* 幸福錦囊 - 齊頭尾工整排版 */
         .sutra-header { color: var(--deep-pink); font-weight: bold; margin-bottom: 12px; font-size: 1.25rem; display: flex; align-items: center; }
         .sutra-header::before { content: "🔮"; margin-right: 10px; }
         .angel-talk { 
@@ -38,16 +36,16 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
 
-        /* J欄：思考引導區 */
+        /* 思考引導區 */
         .think-box { background: var(--think-blue); border: 1.5px dashed #2196f3; border-radius: 18px; padding: 20px; margin: 25px 0; font-size: 1.05rem; color: #444; line-height: 1.8; text-align: justify; }
 
         /* 按鈕群組 */
         .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .btn { padding: 18px; border-radius: 18px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; font-size: 1.1rem; border: none; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-tool { background: var(--tool-green); color: white; }
-        .btn-video { background: var(--video-orange); color: white; }
+        .btn { padding: 18px; border-radius: 18px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; font-size: 1.1rem; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .btn-tool { background: #8bc34a; color: white; }
+        .btn-video { background: #ff7043; color: white; }
         
-        .footer { text-align: center; padding: 45px 25px; font-size: 0.85rem; color: #999; line-height: 1.8; border-top: 1px solid #eee; background: #fafafa; }
+        .footer { text-align: center; padding: 40px 25px; font-size: 0.85rem; color: #999; line-height: 1.8; border-top: 1px solid #eee; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
@@ -57,11 +55,11 @@
 
 <div class="container">
     <div class="main-content">
-        <h1 style="color: var(--deep-pink); letter-spacing: 3px; margin-bottom: 5px;">幸福智多星</h1>
-        <p style="color: #999; font-size: 0.95rem;">與笑長智慧連線 · 即時錦囊</p>
+        <div class="header"><h1>幸福智多星</h1></div>
+        <p style="color: #999; margin-top: 5px;">獨立中控發射台 · 已連線</p>
 
         <div class="search-group">
-            <input type="text" id="userInput" placeholder="請輸入關鍵字（如：愛生氣）" onkeypress="if(event.keyCode==13) fetchFromCloud()">
+            <input type="text" id="userInput" placeholder="輸入關鍵字（如：愛生氣）" onkeypress="if(event.keyCode==13) fetchFromCloud()">
             <button class="ask-btn" onclick="fetchFromCloud()">詢問</button>
         </div>
 
@@ -75,19 +73,15 @@
 
             <div class="btn-group">
                 <button id="toolBtn" class="btn btn-tool" style="display:none;">🛠 領取幸福工具</button>
-                <button id="videoBtn1" class="btn btn-video" style="display:none;">🎬 觀看方案影片(一)</button>
-                <button id="videoBtn2" class="btn btn-video" style="display:none;">🎬 觀看方案影片(二)</button>
+                <button id="videoBtn1" class="btn btn-video" style="display:none;">🎬 觀看專屬方案影片</button>
             </div>
         </div>
     </div>
-    <div class="footer">
-        © 2026 幸福教養概念館<br>
-        笑長致力結合心腦科學實踐，讓愛發揮力量
-    </div>
+    <div class="footer">© 2026 幸福教養概念館 · 笑長與您同行</div>
 </div>
 
 <script>
-    // 您的專屬獨立 API
+    // 這是您給我的最新 API 網址
     const API_URL = "https://script.google.com/macros/s/AKfycbw-UtoT79Q1FWlndVHxS0zM2TgVjUqdQQN1VHgxObZOOXuwPAaViY1XBU1Ac1rlpxc/exec";
 
     async function fetchFromCloud() {
@@ -100,30 +94,28 @@
         panel.style.display = "none";
 
         try {
-            // 加上時間戳記強制刷新資料
+            // 強制加上時間戳記，確保抓到最新試算表內容
             const response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
             const data = await response.json();
             
-            // 搜尋邏輯：模糊搜尋 A 欄
-            const match = data.find(row => {
-                return row.keywords && row.keywords.toString().includes(input);
-            });
+            // 模糊搜尋 A 欄：只要關鍵字字串包含輸入內容
+            const match = data.find(row => row.keywords && row.keywords.toString().includes(input));
 
             loading.style.display = "none";
             panel.style.display = "block";
 
             if (match) {
-                // 1. 呈現 B 欄智慧引導
+                // 呈現 B 欄心法文字
                 document.getElementById('angelVoice').innerText = match.guidance || "";
                 
-                // 2. 呈現 J 欄思考引導
+                // 呈現 J 欄思考提問
                 const thinkArea = document.getElementById('thinkArea');
                 if(match.reflection && match.reflection.trim() !== "") {
                     thinkArea.style.display = "block";
                     thinkArea.innerHTML = "<strong>💡 課題分離提問：</strong><br>" + match.reflection;
                 } else { thinkArea.style.display = "none"; }
 
-                // 3. 呈現 G 欄工具連結
+                // 呈現 G 欄工具連結
                 const toolBtn = document.getElementById('toolBtn');
                 if(match.toolUrl && match.toolUrl.startsWith("http")) {
                     toolBtn.style.display = "block";
@@ -131,30 +123,21 @@
                     toolBtn.onclick = () => window.location.href = match.toolUrl;
                 } else { toolBtn.style.display = "none"; }
 
-                // 4. 呈現 H 欄影片 1
+                // 呈現 H 欄影片連結
                 const videoBtn1 = document.getElementById('videoBtn1');
                 if(match.video1 && match.video1.startsWith("http")) {
                     videoBtn1.style.display = "block";
                     videoBtn1.onclick = () => window.location.href = match.video1;
                 } else { videoBtn1.style.display = "none"; }
 
-                // 5. 呈現 I 欄影片 2
-                const videoBtn2 = document.getElementById('videoBtn2');
-                if(match.video2 && match.video2.startsWith("http")) {
-                    videoBtn2.style.display = "block";
-                    videoBtn2.onclick = () => window.location.href = match.video2;
-                } else { videoBtn2.style.display = "none"; }
-
             } else {
-                document.getElementById('angelVoice').innerText = "智多星查閱後發現，目前尚未收錄此關鍵字。您可以嘗試換個說法，或輸入「生氣」。";
+                document.getElementById('angelVoice').innerText = "智多星思考後發現...目前尚未收錄此關鍵字。請嘗試輸入「生氣」。";
                 document.getElementById('thinkArea').style.display = "none";
                 document.getElementById('toolBtn').style.display = "none";
                 document.getElementById('videoBtn1').style.display = "none";
-                document.getElementById('videoBtn2').style.display = "none";
             }
         } catch (e) {
-            console.error(e);
-            loading.innerText = "❌ 智多星與雲端連線異常，請確認 API 已發布為「所有人」。";
+            loading.innerText = "❌ 連線異常。請確認 Apps Script 已點選「管理部署」並切換至「新版本」。";
         }
     }
 </script>
