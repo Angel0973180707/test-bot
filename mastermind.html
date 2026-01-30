@@ -25,12 +25,9 @@
         
         #loading { display: none; text-align: center; margin: 20px 0; color: var(--deep-pink); font-weight: bold; }
         #response-panel { display: none; margin-top: 20px; animation: fadeIn 0.5s; }
-        .angel-talk { background: #fffafb; padding: 20px; border-radius: 18px; border-left: 6px solid var(--deep-pink); line-height: 1.8; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 15px; }
+        /* 這裡改為可識別 HTML 連結 */
+        .angel-talk { background: #fffafb; padding: 20px; border-radius: 18px; border-left: 6px solid var(--deep-pink); line-height: 1.8; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 15px; word-break: break-all; }
         .think-box { background: var(--think-blue); border-radius: 18px; padding: 18px; margin: 15px 0; color: #1565c0; border: 1px dashed #2196f3; }
-        
-        .btn-link { display: block; width: 100%; padding: 15px; border-radius: 15px; border: none; color: white; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; text-align: center; text-decoration: none; box-sizing: border-box; }
-        .btn-video { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
-        .btn-tool { background: var(--tool-green); }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -59,44 +56,34 @@
         <div class="category-title">✨ 教養篇：孩子行為與溝通</div>
         <div class="suggest-tags">
             <div class="tag" onclick="quickSearch('不專心')">#孩子不專心</div>
-            <div class="tag" onclick="quickSearch('孩子衝突')">#孩子衝突</div>
+            <div class="tag" onclick="quickSearch('衝突')">#孩子衝突</div>
             <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
             <div class="tag" onclick="quickSearch('拒學')">#孩子拒學</div>
-            <div class="tag" onclick="quickSearch('抱怨')">#孩子抱怨</div>
-            <div class="tag" onclick="quickSearch('不合群')">#孩子不合群</div>
         </div>
 
         <div id="loading">✨ 智多星正在調配幸福配方...</div>
         <div id="response-panel">
             <div class="angel-talk" id="guidanceBox"></div>
-            
-            <a id="videoBtn" class="btn-link btn-video" target="_blank" style="display:none;">🎬 觀看幸福調味方案</a>
-            
             <div id="thinkArea" class="think-box"><b>💡 智多星的轉念提點：</b><br><span id="reflectionBox"></span></div>
-            
-            <a id="toolBtn" class="btn-link btn-tool" target="_blank" style="display:none;">🛠 領取幸福工具包</a>
         </div>
     </div>
 </div>
 
 <script>
-    // 已更新為笑長剛剛產生的「新增部署」最新網址
-    const API_URL = "https://script.google.com/macros/s/AKfycbxkAkZQAsZ_4oWsrminSEA6l_2KCKEihyjYdR0oAa1oBfYJvexClGcvuMGcayxJ5bhF/exec";
+    // 請確保這裡的 API_URL 是您 GAS 最新部署的網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbwUMk6uffWOZXE6CxsSReHgMD4U8NvEoYTCOH6_lHMwiYFF1Yc6uRbi3rz0NUyXE0H4/exec";
     
     function quickSearch(word) { document.getElementById('userInput').value = word; fetchFromCloud(false); }
     
     async function fetchFromCloud(isJoke) {
         const loading = document.getElementById('loading');
         const panel = document.getElementById('response-panel');
-        const vBtn = document.getElementById('videoBtn');
-        const tBtn = document.getElementById('toolBtn');
         const inputVal = document.getElementById('userInput').value;
         
-        loading.style.display = "block"; panel.style.display = "none";
-        vBtn.style.display = "none"; tBtn.style.display = "none";
+        loading.style.display = "block"; 
+        panel.style.display = "none";
 
         try {
-            // 加入隨機參數避開手機瀏覽器快取
             const res = await fetch(`${API_URL}?q=${encodeURIComponent(inputVal)}&isJoke=${isJoke}&cache=${new Date().getTime()}`);
             const result = await res.json();
             const data = result.data;
@@ -104,18 +91,16 @@
             
             if (data) {
                 panel.style.display = "block";
-                document.getElementById('guidanceBox').innerText = data.guidance || "智多星正在為您準備建議...";
-                document.getElementById('reflectionBox').innerText = data.reflection || "您的用心是孩子的福氣！";
                 
-                if (data.video1 && data.video1.toLowerCase().startsWith('http')) {
-                    vBtn.href = data.video1; vBtn.style.display = "block";
-                }
-                if (data.toolUrl && data.toolUrl.toLowerCase().startsWith('http')) {
-                    tBtn.href = data.toolUrl; tBtn.style.display = "block";
-                }
+                // 這裡最關鍵：將純文字中的網址轉成可點擊的藍色連結
+                let content = data.guidance || "智多星正在為您準備建議...";
+                let linkedContent = content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #d63384; font-weight: bold; text-decoration: underline;">$1</a>');
+                
+                document.getElementById('guidanceBox').innerHTML = linkedContent;
+                document.getElementById('reflectionBox').innerText = data.reflection || "您的用心是孩子的福氣！";
             }
         } catch (e) { 
-            loading.innerText = "❌ 智多星連線中，請再點一次詢問！"; 
+            loading.innerText = "❌ 幸福大腦連線中，請稍候再點一次！"; 
         }
     }
 </script>
