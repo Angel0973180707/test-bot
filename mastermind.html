@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>幸福智多星</title>
     <style>
-        :root { --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7; --think-blue: #e3f2fd; }
+        :root { --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7; --think-blue: #e3f2fd; --tool-green: #8bc34a; }
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
         .header-section { padding: 30px 20px 20px; text-align: center; background: linear-gradient(to bottom, #fff0f3, #ffffff); }
@@ -16,16 +16,24 @@
         .main-content { padding: 0 20px 30px; }
         .action-row { display: flex; gap: 8px; margin: 20px 0; }
         .search-group { display: flex; background: #fff; border: 2px solid var(--angel-pink); border-radius: 50px; padding: 4px; flex: 1; }
-        .search-group input { flex: 1; border: none; padding: 10px 15px; border-radius: 50px; outline: none; font-size: 1.1rem; }
+        .search-group input { flex: 1; border: none; padding: 10px 15px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100px; }
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 0 20px; border-radius: 50px; cursor: pointer; font-weight: bold; }
         .happy-btn { background: #fbc02d; border: none; padding: 0 15px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(251, 192, 45, 0.3); white-space: nowrap; font-weight: bold; color: #5d4037; }
         .category-title { font-size: 1.1rem; color: var(--deep-pink); margin: 25px 0 12px; font-weight: bold; border-bottom: 1px solid #ffeef1; padding-bottom: 5px; }
         .suggest-tags { display: flex; flex-wrap: wrap; gap: 10px; }
         .tag { background: white; border: 1.5px solid var(--angel-pink); color: var(--deep-pink); padding: 8px 16px; border-radius: 20px; font-size: 1rem; cursor: pointer; }
+        
+        /* 回覆區塊與按鈕優化 */
         #loading { display: none; text-align: center; margin: 20px 0; color: var(--deep-pink); font-weight: bold; }
-        #response-panel { display: none; margin-top: 20px; }
-        .angel-talk { background: #fffafb; padding: 20px; border-radius: 18px; border-left: 6px solid var(--deep-pink); line-height: 1.8; color: #333; font-size: 1.1rem; white-space: pre-wrap; }
-        .think-box { background: var(--think-blue); border-radius: 18px; padding: 18px; margin: 20px 0; color: #1565c0; border: 1px dashed #2196f3; }
+        #response-panel { display: none; margin-top: 20px; animation: fadeIn 0.5s; }
+        .angel-talk { background: #fffafb; padding: 20px; border-radius: 18px; border-left: 6px solid var(--deep-pink); line-height: 1.8; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 15px; }
+        .think-box { background: var(--think-blue); border-radius: 18px; padding: 18px; margin: 15px 0; color: #1565c0; border: 1px dashed #2196f3; }
+        
+        .btn-link { width: 100%; padding: 15px; border-radius: 15px; border: none; color: white; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; display: none; text-align: center; text-decoration: none; }
+        .btn-video { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
+        .btn-tool { background: var(--tool-green); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -62,28 +70,52 @@
         <div id="loading">✨ 智多星正在調配幸福配方...</div>
         <div id="response-panel">
             <div class="angel-talk" id="guidanceBox"></div>
+            
+            <a id="videoBtn" class="btn-link btn-video" target="_blank">🎬 觀看幸福調味方案</a>
+            
             <div id="thinkArea" class="think-box"><b>💡 智多星的轉念提點：</b><br><span id="reflectionBox"></span></div>
+            
+            <a id="toolBtn" class="btn-link btn-tool" target="_blank">🛠 領取幸福工具包</a>
         </div>
     </div>
 </div>
 
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbw-UtoT79Q1FWlndVHxS0zM2TgVjUqdQQN1VHgxObZOOXuwPAaViY1XBU1Ac1rlpxc/exec";
+    
     function quickSearch(word) { document.getElementById('userInput').value = word; fetchFromCloud(false); }
+    
     async function fetchFromCloud(isJoke) {
         const loading = document.getElementById('loading');
         const panel = document.getElementById('response-panel');
+        const vBtn = document.getElementById('videoBtn');
+        const tBtn = document.getElementById('toolBtn');
+        
         loading.style.display = "block"; panel.style.display = "none";
+        vBtn.style.display = "none"; tBtn.style.display = "none";
+
         try {
-            const res = await fetch(`${API_URL}?q=${encodeURIComponent(document.getElementById('userInput').value)}&isJoke=${isJoke}`);
+            const val = document.getElementById('userInput').value;
+            const res = await fetch(`${API_URL}?q=${encodeURIComponent(val)}&isJoke=${isJoke}`);
             const result = await res.json();
+            const data = result.data;
             loading.style.display = "none";
-            if (result.data) {
+            
+            if (data) {
                 panel.style.display = "block";
-                document.getElementById('guidanceBox').innerText = result.data.guidance;
-                document.getElementById('reflectionBox').innerText = result.data.reflection || "保持正能量，您做得很好！";
+                document.getElementById('guidanceBox').innerText = data.guidance;
+                document.getElementById('reflectionBox').innerText = data.reflection;
+                
+                // 判斷並顯示影片按鈕 (GAS 中的 video1 或 toolUrl)
+                if (data.video1 && data.video1.startsWith('http')) {
+                    vBtn.href = data.video1; vBtn.style.display = "block";
+                }
+                // 判斷並顯示工具按鈕 (GAS 中的 toolUrl)
+                if (data.toolUrl && data.toolUrl.startsWith('http')) {
+                    tBtn.href = data.toolUrl; tBtn.style.display = "block";
+                }
             }
-        } catch (e) { loading.innerText = "❌ 讀取超時，請再點一次「詢問」！"; }
+        } catch (e) { loading.innerText = "❌ 智多星思考中，請稍後再試！"; }
     }
 </script>
 </body>
