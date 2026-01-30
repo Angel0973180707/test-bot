@@ -50,7 +50,7 @@
         .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.6; color: #333; font-size: 0.9rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
         .think-box { background: var(--soft-blue); border-radius: 15px; padding: 12px; margin: 8px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.85rem; }
 
-        /* 🎀 配方按鈕樣式 */
+        /* 🎀 配方按鈕立體化樣式 */
         .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 12px 0; font-size: 0.9rem; transition: 0.1s; box-sizing: border-box; }
         .url-button:active { transform: translateY(2px); border-bottom-width: 1px !important; }
         
@@ -77,7 +77,7 @@
 
         <div class="category-title">✨ 大人篇：情緒照顧與穩定</div>
         <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('壓力山大')">#壓力山大</div>
+            <div class="tag" onclick="quickSearch('感恩科學')">#感恩科學</div>
             <div class="tag" onclick="quickSearch('教養衝動')">#教養衝動</div>
             <div class="tag" onclick="quickSearch('教養挫折')">#教養挫折</div>
             <div class="tag" onclick="quickSearch('教養焦慮')">#教養焦慮</div>
@@ -162,7 +162,7 @@
                 rawLines.forEach(line => {
                     if (line.includes('https://')) {
                         let url = line.match(/https?:\/\/[^\s]+/)[0];
-                        // 🛠️ 強化偵測：如果行內包含「工具」，強制顯示藍色按鈕
+                        // 🛠️ 強化修正：只要標題包含「工具」，按鈕強制顯示藍色
                         if (line.includes('工具')) {
                             finalHtml += `<a href="${url}" target="_blank" class="url-button btn-tool">🛠️ 領取幸福工具包</a>`;
                         } else {
