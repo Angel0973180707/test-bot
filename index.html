@@ -31,9 +31,10 @@
         .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.5; color: #333; font-size: 0.9rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
         .think-box { background: var(--soft-blue); border-radius: 15px; padding: 12px; margin: 8px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.85rem; }
 
+        /* 🎀 按鈕邏輯樣式 */
         .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 10px 0; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-tool { background-color: var(--think-blue) !important; } 
-        .btn-vid { background-color: var(--deep-pink) !important; }  
+        .btn-blue { background-color: var(--think-blue) !important; } /* 工具包專用藍 */
+        .btn-pink { background-color: var(--deep-pink) !important; }  /* 調味包專用粉 */
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -136,10 +137,12 @@
                 rawLines.forEach(line => {
                     if (line.includes('https://')) {
                         let url = line.match(/https?:\/\/[^\s]+/)[0];
+                        // 🛠️ 強化解析邏輯：確保工具包一定是藍色且顯示工具包文字
                         if (line.includes('工具')) {
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-tool">🛠️ 領取幸福工具包</a>`;
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-blue">🛠️ 領取幸福工具包</a>`;
                         } else {
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-vid">🎬 打開幸福調味包</a>`;
+                            // 🎬 調味包邏輯：粉色與打板圖示
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-pink">🎬 打開幸福調味包</a>`;
                         }
                     } else {
                         finalHtml += line + "<br>";
@@ -150,7 +153,7 @@
                 rBox.innerText = data.reflection || "您的用心是孩子的福氣！";
             }
         } catch (e) { 
-            loading.innerText = "❌ 大腦連線中，請稍候重試！"; 
+            loading.innerText = "❌ 幸福大腦連線中，請稍候再試一次！"; 
         }
     }
 </script>
