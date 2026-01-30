@@ -80,7 +80,7 @@
 </div>
 
 <script>
-    // 已更新為您最新的連線網址
+    // 已更新為您最新的連線網址（結尾為 BGkbD/exec）
     const API_URL = "https://script.google.com/macros/s/AKfycbxLIVuH3C8MxZx5eNW6M9WKgBtRoNKIasfjcYlFBB0KHrl0GWc-XfE5ZYMNgFuBGkbD/exec";
     
     function quickSearch(word) { document.getElementById('userInput').value = word; fetchFromCloud(false); }
@@ -106,15 +106,11 @@
                 document.getElementById('guidanceBox').innerText = data.guidance || "智多星正在為您準備建議...";
                 document.getElementById('reflectionBox').innerText = data.reflection || "您的用心是孩子的福氣！";
                 
-                // 檢查影片連結
                 if (data.video1 && data.video1.toLowerCase().startsWith('http')) {
-                    vBtn.href = data.video1;
-                    vBtn.style.display = "block";
+                    vBtn.href = data.video1; vBtn.style.display = "block";
                 }
-                // 檢查工具連結
                 if (data.toolUrl && data.toolUrl.toLowerCase().startsWith('http')) {
-                    tBtn.href = data.toolUrl;
-                    tBtn.style.display = "block";
+                    tBtn.href = data.toolUrl; tBtn.style.display = "block";
                 }
             }
         } catch (e) { 
