@@ -12,64 +12,48 @@
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
         
-        /* 頂部形象區 - 保留 */
-        .header-section { 
-            padding: 20px; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            background: linear-gradient(to bottom, #fff0f3, #ffffff);
-        }
+        .header-section { padding: 20px; display: flex; align-items: center; gap: 15px; background: linear-gradient(to bottom, #fff0f3, #ffffff); }
         .ambassador-mini { 
-            width: 80px; height: 80px; 
-            border-radius: 50%; 
-            border: 3px solid white; 
-            box-shadow: 0 4px 10px rgba(214,51,132,0.2);
-            overflow: hidden;
+            width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; 
+            box-shadow: 0 4px 10px rgba(214,51,132,0.2); overflow: hidden;
             animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .ambassador-mini img { width: 100%; height: 100%; object-fit: cover; }
-        
         .header-text { text-align: left; }
         .header-text h2 { margin: 0; color: var(--deep-pink); font-size: 1.4rem; }
         .header-text p { margin: 2px 0 0; color: #888; font-size: 0.95rem; font-weight: bold; }
 
         .main-content { padding: 0 20px 30px; }
         
-        /* 擴充：搜尋組件（加入開心鈕） */
+        /* 搜尋與開心鈕佈局 */
         .action-row { display: flex; gap: 8px; margin: 15px 0; align-items: stretch; }
         .search-group { display: flex; background: #fff; border: 2px solid var(--angel-pink); border-radius: 50px; padding: 4px; flex: 1; margin: 0; }
         .search-group input { flex: 1; border: none; padding: 10px 15px; border-radius: 50px; outline: none; font-size: 1rem; width: 50%; }
-        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 8px 22px; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        .happy-btn { background: #fbc02d; border: none; padding: 0 15px; border-radius: 50px; cursor: pointer; font-size: 1.4rem; box-shadow: 0 4px 10px rgba(251, 192, 45, 0.3); transition: 0.2s; }
-        .happy-btn:active { transform: scale(0.9); }
+        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 8px 18px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        
+        .happy-btn { 
+            background: #fbc02d; border: none; padding: 0 12px; border-radius: 50px; cursor: pointer; 
+            box-shadow: 0 4px 10px rgba(251, 192, 45, 0.3); transition: 0.2s;
+            display: flex; align-items: center; gap: 4px; white-space: nowrap;
+        }
+        .happy-btn span { font-size: 0.85rem; font-weight: bold; color: #5d4037; }
 
-        /* 智慧提示標籤區 - 保留 */
         .category-title { font-size: 0.95rem; color: var(--deep-pink); margin: 20px 0 10px; font-weight: bold; display: flex; align-items: center; border-bottom: 1px solid #ffeef1; padding-bottom: 5px; }
         .category-title::before { content: "✨"; margin-right: 6px; }
-        
         .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 5px; }
         .tag { background: white; border: 1.2px solid var(--angel-pink); color: var(--deep-pink); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
-        .tag:hover { background: var(--angel-pink); color: white; }
-
-        #loading { display: none; text-align: center; margin: 25px 0; color: var(--deep-pink); font-weight: bold; animation: pulse 1.5s infinite; }
         
-        /* 擴充：來源標籤 */
+        #loading { display: none; text-align: center; margin: 25px 0; color: var(--deep-pink); font-weight: bold; animation: pulse 1.5s infinite; }
         .source-badge { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; margin-bottom: 10px; font-weight: bold; }
         .source-master { background: var(--angel-pink); color: var(--deep-pink); }
         .source-ai { background: var(--think-blue); color: #1565c0; }
 
-        /* 結果顯示區 - 保留並擴充動畫 */
         #response-panel { display: none; animation: fadeIn 0.5s ease; margin-top: 20px; }
         .angel-talk { background: #fffafb; padding: 20px; border-radius: 18px; border-left: 6px solid var(--deep-pink); line-height: 1.8; color: #333; font-size: 1.05rem; margin-bottom: 20px; white-space: pre-wrap; }
-        
         .btn-v { width: 100%; padding: 16px; border-radius: 15px; font-weight: bold; border: none; cursor: pointer; margin-bottom: 12px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; }
         .btn-soul { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
-        .btn-edu { background: linear-gradient(135deg, #ff8a65, #e64a19); }
         .btn-tool { background: var(--tool-green); color: white; width: 100%; padding: 16px; border-radius: 15px; font-weight: bold; border: none; margin-top: 10px; font-size: 1rem; cursor: pointer; }
-
         .think-box { background: var(--think-blue); border-radius: 18px; padding: 18px; margin: 25px 0; color: #1565c0; border: 1px dashed #2196f3; line-height: 1.7; }
-        .think-box b { display: block; margin-bottom: 8px; color: #0d47a1; }
 
         @keyframes popIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -81,7 +65,7 @@
 <div class="container">
     <div class="header-section">
         <div class="ambassador-mini">
-            <img src="1769671255343.jpeg" alt="形象大使" id="headerImg">
+            <img src="1769671255343.jpg" alt="形象大使" id="headerImg">
         </div>
         <div class="header-text">
             <h2>幸福智多星</h2>
@@ -95,7 +79,9 @@
                 <input type="text" id="userInput" placeholder="輸入您的教養困擾...">
                 <button class="ask-btn" onclick="fetchFromCloud(false)">詢問</button>
             </div>
-            <button class="happy-btn" onclick="fetchFromCloud(true)" title="點我開心">🌻</button>
+            <button class="happy-btn" onclick="fetchFromCloud(true)">
+                🌻 <span>開心一下</span>
+            </button>
         </div>
 
         <div class="category-title">大人篇：情緒照顧與穩定</div>
@@ -103,17 +89,13 @@
             <div class="tag" onclick="quickSearch('教養衝動')">#教養衝動</div>
             <div class="tag" onclick="quickSearch('教養挫折')">#教養挫折</div>
             <div class="tag" onclick="quickSearch('教養焦慮')">#教養焦慮</div>
-            <div class="tag" onclick="quickSearch('壓力山大')">#壓力山大</div>
         </div>
 
         <div class="category-title">教養篇：孩子行為與溝通</div>
         <div class="suggest-tags">
             <div class="tag" onclick="quickSearch('不專心')">#孩子不專心</div>
-            <div class="tag" onclick="quickSearch('孩子衝突')">#孩子衝突</div>
             <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
-            <div class="tag" onclick="quickSearch('拒學')">#孩子拒學</div>
-            <div class="tag" onclick="quickSearch('抱怨')">#孩子抱怨</div>
-            <div class="tag" onclick="quickSearch('不合群')">#孩子不合群</div>
+            <div class="tag" onclick="quickSearch('不收玩具')">#不收玩具</div>
         </div>
 
         <div id="loading">✨ 智多星正在調配幸福配方...</div>
@@ -121,10 +103,7 @@
         <div id="response-panel">
             <div id="sourceBadge" class="source-badge"></div>
             <div class="angel-talk" id="guidanceBox"></div> 
-            <div class="video-box">
-                <button id="vBtn1" class="btn-v btn-soul" style="display:none;"></button>
-                <button id="vBtn2" class="btn-v btn-edu" style="display:none;"></button>
-            </div>
+            <button id="vBtn1" class="btn-v btn-soul" style="display:none;"></button>
             <div id="thinkArea" class="think-box" style="display:none;">
                 <b>💡 智多星的轉念提點：</b>
                 <span id="reflectionBox"></span>
@@ -135,7 +114,6 @@
 </div>
 
 <script>
-    // 已更新為笑長的最新 GAS 網址
     const API_URL = "https://script.google.com/macros/s/AKfycbw-UtoT79Q1FWlndVHxS0zM2TgVjUqdQQN1VHgxObZOOXuwPAaViY1XBU1Ac1rlpxc/exec";
 
     function quickSearch(word) {
@@ -144,22 +122,17 @@
     }
 
     async function fetchFromCloud(isJoke) {
-        const userInputBox = document.getElementById('userInput');
-        const input = userInputBox.value.trim();
+        const input = document.getElementById('userInput').value.trim();
         if (!input && !isJoke) return;
-
         const loading = document.getElementById('loading');
         const panel = document.getElementById('response-panel');
         const headerImg = document.getElementById('headerImg');
 
         loading.style.display = "block";
         panel.style.display = "none";
-
-        // 開心鈕互動效果
-        if(isJoke) { headerImg.style.filter = "brightness(1.2) sepia(0.2)"; }
+        if(isJoke) { headerImg.style.filter = "brightness(1.2)"; }
 
         try {
-            // 呼叫支援 AI 與 Joke 的雙引擎 GAS
             const response = await fetch(`${API_URL}?q=${encodeURIComponent(input)}&isJoke=${isJoke}&t=${new Date().getTime()}`);
             const result = await response.json();
             const match = result.data;
@@ -171,32 +144,22 @@
                 panel.style.display = "block";
                 document.getElementById('guidanceBox').innerText = match.guidance || "";
                 
-                // 顯示來源標籤
                 const badge = document.getElementById('sourceBadge');
-                badge.innerText = match.source === "笑長親授" ? "✨ 笑長親授秘笈" : "🤖 AI 智囊團補充";
+                badge.innerText = match.source === "笑長親授" ? "✨ 笑長親授秘笈" : "🤖 AI 助理補給站";
                 badge.className = match.source === "笑長親授" ? "source-badge source-master" : "source-badge source-ai";
 
-                // 影片按鈕 (支援兩個)
                 const v1 = document.getElementById('vBtn1');
-                if (match.video1 && match.video1.startsWith("http")) {
-                    v1.style.display = "flex"; v1.innerHTML = "🎬 觀看幸福調味方案 (一)";
+                if (match.video1) {
+                    v1.style.display = "flex"; v1.innerText = "🎬 觀看幸福調味方案";
                     v1.onclick = () => window.location.href = match.video1;
                 } else { v1.style.display = "none"; }
 
-                const v2 = document.getElementById('vBtn2');
-                if (match.video2 && match.video2.startsWith("http")) {
-                    v2.style.display = "flex"; v2.innerHTML = "🎬 觀看幸福調味方案 (二)";
-                    v2.onclick = () => window.location.href = match.video2;
-                } else { v2.style.display = "none"; }
-
-                // 思考引導
                 const thinkArea = document.getElementById('thinkArea');
                 if (match.reflection) {
                     thinkArea.style.display = "block";
                     document.getElementById('reflectionBox').innerText = match.reflection;
                 } else { thinkArea.style.display = "none"; }
 
-                // 工具按鈕
                 const tBtn = document.getElementById('toolBtn');
                 if (match.toolUrl) {
                     tBtn.style.display = "block";
@@ -205,12 +168,8 @@
                 } else { tBtn.style.display = "none"; }
                 
                 window.scrollTo({ top: panel.offsetTop - 20, behavior: 'smooth' });
-            } else {
-                alert("智多星正在收錄更多智慧，請試試其他關鍵字！");
             }
-        } catch (e) { 
-            loading.innerText = "❌ 讀取失敗，請檢查網路。"; 
-        }
+        } catch (e) { loading.innerText = "❌ 連線繁忙，請稍後再試。"; }
     }
 </script>
 </body>
