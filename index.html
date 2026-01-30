@@ -23,13 +23,12 @@
         .suggest-tags { display: flex; flex-wrap: wrap; gap: 10px; }
         .tag { background: white; border: 1.5px solid var(--angel-pink); color: var(--deep-pink); padding: 8px 16px; border-radius: 20px; font-size: 1rem; cursor: pointer; }
         
-        /* 回覆區塊與按鈕優化 */
         #loading { display: none; text-align: center; margin: 20px 0; color: var(--deep-pink); font-weight: bold; }
         #response-panel { display: none; margin-top: 20px; animation: fadeIn 0.5s; }
         .angel-talk { background: #fffafb; padding: 20px; border-radius: 18px; border-left: 6px solid var(--deep-pink); line-height: 1.8; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 15px; }
         .think-box { background: var(--think-blue); border-radius: 18px; padding: 18px; margin: 15px 0; color: #1565c0; border: 1px dashed #2196f3; }
         
-        .btn-link { width: 100%; padding: 15px; border-radius: 15px; border: none; color: white; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; display: none; text-align: center; text-decoration: none; }
+        .btn-link { display: block; width: 100%; padding: 15px; border-radius: 15px; border: none; color: white; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; text-align: center; text-decoration: none; box-sizing: border-box; }
         .btn-video { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
         .btn-tool { background: var(--tool-green); }
         
@@ -71,17 +70,18 @@
         <div id="response-panel">
             <div class="angel-talk" id="guidanceBox"></div>
             
-            <a id="videoBtn" class="btn-link btn-video" target="_blank">🎬 觀看幸福調味方案</a>
+            <a id="videoBtn" class="btn-link btn-video" target="_blank" style="display:none;">🎬 觀看幸福調味方案</a>
             
             <div id="thinkArea" class="think-box"><b>💡 智多星的轉念提點：</b><br><span id="reflectionBox"></span></div>
             
-            <a id="toolBtn" class="btn-link btn-tool" target="_blank">🛠 領取幸福工具包</a>
+            <a id="toolBtn" class="btn-link btn-tool" target="_blank" style="display:none;">🛠 領取幸福工具包</a>
         </div>
     </div>
 </div>
 
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbw-UtoT79Q1FWlndVHxS0zM2TgVjUqdQQN1VHgxObZOOXuwPAaViY1XBU1Ac1rlpxc/exec";
+    // 已更新為您最新的連線網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbxLIVuH3C8MxZx5eNW6M9WKgBtRoNKIasfjcYlFBB0KHrl0GWc-XfE5ZYMNgFuBGkbD/exec";
     
     function quickSearch(word) { document.getElementById('userInput').value = word; fetchFromCloud(false); }
     
@@ -90,32 +90,36 @@
         const panel = document.getElementById('response-panel');
         const vBtn = document.getElementById('videoBtn');
         const tBtn = document.getElementById('toolBtn');
+        const inputVal = document.getElementById('userInput').value;
         
         loading.style.display = "block"; panel.style.display = "none";
         vBtn.style.display = "none"; tBtn.style.display = "none";
 
         try {
-            const val = document.getElementById('userInput').value;
-            const res = await fetch(`${API_URL}?q=${encodeURIComponent(val)}&isJoke=${isJoke}`);
+            const res = await fetch(`${API_URL}?q=${encodeURIComponent(inputVal)}&isJoke=${isJoke}`);
             const result = await res.json();
             const data = result.data;
             loading.style.display = "none";
             
             if (data) {
                 panel.style.display = "block";
-                document.getElementById('guidanceBox').innerText = data.guidance;
-                document.getElementById('reflectionBox').innerText = data.reflection;
+                document.getElementById('guidanceBox').innerText = data.guidance || "智多星正在為您準備建議...";
+                document.getElementById('reflectionBox').innerText = data.reflection || "您的用心是孩子的福氣！";
                 
-                // 判斷並顯示影片按鈕 (GAS 中的 video1 或 toolUrl)
-                if (data.video1 && data.video1.startsWith('http')) {
-                    vBtn.href = data.video1; vBtn.style.display = "block";
+                // 檢查影片連結
+                if (data.video1 && data.video1.toLowerCase().startsWith('http')) {
+                    vBtn.href = data.video1;
+                    vBtn.style.display = "block";
                 }
-                // 判斷並顯示工具按鈕 (GAS 中的 toolUrl)
-                if (data.toolUrl && data.toolUrl.startsWith('http')) {
-                    tBtn.href = data.toolUrl; tBtn.style.display = "block";
+                // 檢查工具連結
+                if (data.toolUrl && data.toolUrl.toLowerCase().startsWith('http')) {
+                    tBtn.href = data.toolUrl;
+                    tBtn.style.display = "block";
                 }
             }
-        } catch (e) { loading.innerText = "❌ 智多星思考中，請稍後再試！"; }
+        } catch (e) { 
+            loading.innerText = "❌ 智多星連線中，請再點一次詢問！"; 
+        }
     }
 </script>
 </body>
