@@ -8,35 +8,32 @@
         :root { --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7; --think-blue: #007bff; --soft-blue: #e3f2fd; }
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-        
-        /* 頁首縮減空間 */
-        .header-section { padding: 15px 20px 5px; text-align: center; background: linear-gradient(to bottom, #fff0f3, #ffffff); }
-        .ambassador-mini { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(214,51,132,0.15); margin: 0 auto 8px; overflow: hidden; }
+        .header-section { padding: 20px 20px 5px; text-align: center; background: linear-gradient(to bottom, #fff0f3, #ffffff); }
+        .ambassador-mini { width: 85px; height: 85px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(214,51,132,0.15); margin: 0 auto 10px; overflow: hidden; }
         .ambassador-mini img { width: 100%; height: 100%; object-fit: cover; }
-        .header-text h2 { margin: 0; color: var(--deep-pink); font-size: 1.25rem; }
-        .header-text p { margin: 2px 0 0; color: #888; font-size: 0.8rem; font-weight: bold; }
+        .header-text h2 { margin: 0; color: var(--deep-pink); font-size: 1.3rem; }
+        .header-text p { margin: 3px 0 0; color: #888; font-size: 0.85rem; font-weight: bold; }
         
         .main-content { padding: 0 15px 30px; }
-        .action-row { display: flex; gap: 6px; margin: 10px 0; }
-        .search-group { display: flex; background: #fff; border: 1.5px solid var(--angel-pink); border-radius: 50px; padding: 2px; flex: 1; }
-        .search-group input { flex: 1; border: none; padding: 6px 12px; border-radius: 50px; outline: none; font-size: 0.9rem; width: 60px; }
+        .action-row { display: flex; gap: 6px; margin: 12px 0; }
+        .search-group { display: flex; background: #fff; border: 1.5px solid var(--angel-pink); border-radius: 50px; padding: 3px; flex: 1; }
+        .search-group input { flex: 1; border: none; padding: 6px 12px; border-radius: 50px; outline: none; font-size: 0.95rem; width: 60px; }
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 0 12px; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
         .happy-btn { background: #fbc02d; border: none; padding: 0 10px; border-radius: 50px; cursor: pointer; font-weight: bold; color: #5d4037; font-size: 0.8rem; white-space: nowrap; }
 
-        .category-title { font-size: 0.85rem; color: var(--deep-pink); margin: 12px 0 6px; font-weight: bold; border-bottom: 1px solid #ffeef1; padding-bottom: 3px; }
-        .suggest-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-        .tag { background: white; border: 1px solid var(--angel-pink); color: var(--deep-pink); padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; cursor: pointer; }
+        .category-title { font-size: 0.9rem; color: var(--deep-pink); margin: 15px 0 8px; font-weight: bold; border-bottom: 1px solid #ffeef1; padding-bottom: 3px; }
+        .suggest-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag { background: white; border: 1px solid var(--angel-pink); color: var(--deep-pink); padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
         
         #loading { display: none; text-align: center; margin: 15px 0; color: var(--deep-pink); font-size: 0.85rem; }
         #response-panel { display: none; margin-top: 12px; animation: fadeIn 0.4s; }
         
-        .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.5; color: #333; font-size: 0.88rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
+        .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.5; color: #333; font-size: 0.9rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
         .think-box { background: var(--soft-blue); border-radius: 15px; padding: 12px; margin: 8px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.85rem; }
 
-        /* 🎀 按鈕顏色徹底區分邏輯 */
         .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 10px 0; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-blue { background-color: var(--think-blue) !important; } /* 工具包：藍色 */
-        .btn-pink { background-color: var(--deep-pink) !important; }  /* 調味包：粉色 */
+        .btn-tool { background-color: var(--think-blue) !important; } 
+        .btn-vid { background-color: var(--deep-pink) !important; }  
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -83,6 +80,29 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycby2XB5lJ1E72dO25yNtNpI9VOOGJkJXJfCbtCxT19oU1Be6E3RaUP4zzjsYkUjVGLNT/exec";
 
+    const localJokes = [
+        "所謂的『優雅育兒』，就是你在心裡已經把孩子吊起來打了兩百次，但臉上依然保持微笑。",
+        "育兒就是一場長達 20 年的修行，孩子是你的業障，老公是你的考驗。",
+        "如果你發現孩子突然安靜，趕快檢查鍵盤是不是少了好幾個鍵。",
+        "當媽後最想念的地方不是百貨公司，而是沒有人在門口喊『媽～』的廁所。",
+        "教養書說要給孩子選擇權：『你是要現在乖乖睡覺，還是要等我發火再睡覺？』",
+        "所謂父愛如山，意思就是不管家裡發生什麼事，爸爸都像一座山一樣，坐在沙發上一動不動。",
+        "孩子是看著父母的背影長大的，但如果你一直在玩手機，他看的是你的低頭姿勢。",
+        "為什麼孩子總在睡前突然想討論人生哲學？因為他們發現這樣可以晚睡 10 分鐘。",
+        "生孩子前，以為家裡是文青風；生後，變成了命案現場風，到處是樂高殘肢。",
+        "有一種餓，是奶奶覺得你餓；有一種冷，是媽媽覺得你冷。",
+        "聽說睡眠對發育很重要，但我更覺得睡眠對我的脾氣控制很重要。",
+        "教孩子寫作業的過程，本質上是一場關於心肌梗塞的預演。",
+        "所謂『歲月靜好』，指的是孩子都去上學的那 8 個小時。",
+        "當你開始覺得孩子很可愛時，通常是因為他已經睡著了。",
+        "減肥失敗的原因：不想浪費孩子沒吃完的雞塊、薯條、披薩。",
+        "育兒最大的謊言：『等你長大後，我就輕鬆了。』",
+        "孩子就像 WiFi，有的訊號強，有的訊號弱，但只要斷線，全家人都會崩潰。",
+        "帶孩子出門旅遊，不叫旅遊，那叫『換個地方帶小孩』。",
+        "家長聚會只有一個主題：比慘。比誰的孩子更早起，比誰的肝更累。",
+        "每天早上起床支撐我的動力，不是夢想，是孩子在床頭蹦跳的聲音。"
+    ];
+    
     function quickSearch(word) { document.getElementById('userInput').value = word; fetchFromCloud(false); }
     
     async function fetchFromCloud(isJoke) {
@@ -93,6 +113,14 @@
         const inputVal = document.getElementById('userInput').value;
         
         loading.style.display = "block"; panel.style.display = "none";
+
+        if (isJoke) {
+            const randomJoke = localJokes[Math.floor(Math.random() * localJokes.length)];
+            loading.style.display = "none"; panel.style.display = "block";
+            gBox.innerHTML = "【🔥 教養大實話】<br><br>" + randomJoke;
+            rBox.innerText = "笑一笑，幸福就來了！";
+            return;
+        }
 
         try {
             const res = await fetch(`${API_URL}?q=${encodeURIComponent(inputVal)}&cache=${new Date().getTime()}`);
@@ -108,12 +136,10 @@
                 rawLines.forEach(line => {
                     if (line.includes('https://')) {
                         let url = line.match(/https?:\/\/[^\s]+/)[0];
-                        // 🛠️ 精準偵測：如果行內包含「工具」，強行設定為藍色與特定文字
                         if (line.includes('工具')) {
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-blue">🛠️ 領取幸福工具包</a>`;
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-tool">🛠️ 領取幸福工具包</a>`;
                         } else {
-                            // 🎬 預設調味包：粉色與打板圖示
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-pink">🎬 打開幸福調味包</a>`;
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-vid">🎬 打開幸福調味包</a>`;
                         }
                     } else {
                         finalHtml += line + "<br>";
@@ -124,7 +150,7 @@
                 rBox.innerText = data.reflection || "您的用心是孩子的福氣！";
             }
         } catch (e) { 
-            loading.innerText = "❌ 幸福大腦連線中，請稍候再試一次！"; 
+            loading.innerText = "❌ 大腦連線中，請稍候重試！"; 
         }
     }
 </script>
