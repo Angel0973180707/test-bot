@@ -9,6 +9,7 @@
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
         
+        /* 頁首縮減空間 */
         .header-section { padding: 15px 20px 5px; text-align: center; background: linear-gradient(to bottom, #fff0f3, #ffffff); }
         .ambassador-mini { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(214,51,132,0.15); margin: 0 auto 8px; overflow: hidden; }
         .ambassador-mini img { width: 100%; height: 100%; object-fit: cover; }
@@ -24,17 +25,18 @@
 
         .category-title { font-size: 0.85rem; color: var(--deep-pink); margin: 12px 0 6px; font-weight: bold; border-bottom: 1px solid #ffeef1; padding-bottom: 3px; }
         .suggest-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-        .tag { background: white; border: 1px solid var(--angel-pink); color: var(--deep-pink); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; }
+        .tag { background: white; border: 1px solid var(--angel-pink); color: var(--deep-pink); padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; cursor: pointer; }
         
         #loading { display: none; text-align: center; margin: 15px 0; color: var(--deep-pink); font-size: 0.85rem; }
         #response-panel { display: none; margin-top: 12px; animation: fadeIn 0.4s; }
         
         .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.5; color: #333; font-size: 0.88rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
-        .think-box { background: var(--soft-blue); border-radius: 15px; padding: 12px; margin: 8px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.8rem; }
+        .think-box { background: var(--soft-blue); border-radius: 15px; padding: 12px; margin: 8px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.85rem; }
 
-        .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 10px 0; font-size: 0.85rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-tool { background-color: var(--think-blue); } 
-        .btn-vid { background-color: var(--deep-pink); }  
+        /* 🎀 按鈕顏色徹底區分邏輯 */
+        .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 10px 0; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn-blue { background-color: var(--think-blue) !important; } /* 工具包：藍色 */
+        .btn-pink { background-color: var(--deep-pink) !important; }  /* 調味包：粉色 */
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -54,6 +56,7 @@
 
         <div class="category-title">✨ 大人篇：情緒照顧與穩定</div>
         <div class="suggest-tags">
+            <div class="tag" onclick="quickSearch('壓力山大')">#壓力山大</div>
             <div class="tag" onclick="quickSearch('教養衝動')">#教養衝動</div>
             <div class="tag" onclick="quickSearch('教養挫折')">#教養挫折</div>
             <div class="tag" onclick="quickSearch('教養焦慮')">#教養焦慮</div>
@@ -105,10 +108,12 @@
                 rawLines.forEach(line => {
                     if (line.includes('https://')) {
                         let url = line.match(/https?:\/\/[^\s]+/)[0];
+                        // 🛠️ 精準偵測：如果行內包含「工具」，強行設定為藍色與特定文字
                         if (line.includes('工具')) {
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-tool">🛠️ 領取幸福工具包</a>`;
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-blue">🛠️ 領取幸福工具包</a>`;
                         } else {
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-vid">🎬 打開幸福調味包</a>`;
+                            // 🎬 預設調味包：粉色與打板圖示
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-pink">🎬 打開幸福調味包</a>`;
                         }
                     } else {
                         finalHtml += line + "<br>";
@@ -119,7 +124,7 @@
                 rBox.innerText = data.reflection || "您的用心是孩子的福氣！";
             }
         } catch (e) { 
-            loading.innerText = "❌ 大腦連線中，請稍候重試！"; 
+            loading.innerText = "❌ 幸福大腦連線中，請稍候再試一次！"; 
         }
     }
 </script>
