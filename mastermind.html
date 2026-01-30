@@ -80,8 +80,8 @@
 </div>
 
 <script>
-    // 已更新為您最新的連線網址（結尾為 BGkbD/exec）
-    const API_URL = "https://script.google.com/macros/s/AKfycbxLIVuH3C8MxZx5eNW6M9WKgBtRoNKIasfjcYlFBB0KHrl0GWc-XfE5ZYMNgFuBGkbD/exec";
+    // 已更新為笑長測試成功的新網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbxTjAsBcVqL0ml-no7k1s083_uXl3Pp69JK5Lx-cm4V3eg7LaxW-m9ZDLQJXO5e1AdZ/exec";
     
     function quickSearch(word) { document.getElementById('userInput').value = word; fetchFromCloud(false); }
     
@@ -96,7 +96,8 @@
         vBtn.style.display = "none"; tBtn.style.display = "none";
 
         try {
-            const res = await fetch(`${API_URL}?q=${encodeURIComponent(inputVal)}&isJoke=${isJoke}`);
+            // 加入隨機參數避開手機瀏覽器快取
+            const res = await fetch(`${API_URL}?q=${encodeURIComponent(inputVal)}&isJoke=${isJoke}&cache=${new Date().getTime()}`);
             const result = await res.json();
             const data = result.data;
             loading.style.display = "none";
