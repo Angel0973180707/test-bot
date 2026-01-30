@@ -8,10 +8,11 @@
         :root { --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7; --think-blue: #007bff; --soft-blue: #e3f2fd; }
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        
         .header-section { padding: 15px 20px 5px; text-align: center; background: linear-gradient(to bottom, #fff0f3, #ffffff); }
         .ambassador-mini { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(214,51,132,0.15); margin: 0 auto 8px; overflow: hidden; }
         .ambassador-mini img { width: 100%; height: 100%; object-fit: cover; }
-        .header-text h2 { margin: 0; color: var(--deep-pink); font-size: 1.2rem; }
+        .header-text h2 { margin: 0; color: var(--deep-pink); font-size: 1.25rem; }
         .header-text p { margin: 2px 0 0; color: #888; font-size: 0.8rem; font-weight: bold; }
         
         .main-content { padding: 0 15px 30px; }
@@ -28,13 +29,12 @@
         #loading { display: none; text-align: center; margin: 15px 0; color: var(--deep-pink); font-size: 0.85rem; }
         #response-panel { display: none; margin-top: 12px; animation: fadeIn 0.4s; }
         
-        .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.5; color: #333; font-size: 0.85rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
+        .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.5; color: #333; font-size: 0.88rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
         .think-box { background: var(--soft-blue); border-radius: 15px; padding: 12px; margin: 8px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.8rem; }
 
-        /* 🎀 按鈕顏色區分樣式 */
         .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 10px 0; font-size: 0.85rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-tool { background-color: var(--think-blue) !important; } /* 工具鈕藍色 */
-        .btn-vid { background-color: var(--deep-pink) !important; }  /* 調味包粉色 */
+        .btn-tool { background-color: var(--think-blue); } 
+        .btn-vid { background-color: var(--deep-pink); }  
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -52,9 +52,8 @@
             <button class="happy-btn" onclick="fetchFromCloud(true)">🌻 開心一下</button>
         </div>
 
-        <div class="category-title">✨ 大人篇：壓力與情緒穩定</div>
+        <div class="category-title">✨ 大人篇：情緒照顧與穩定</div>
         <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('壓力山大')">#壓力山大</div>
             <div class="tag" onclick="quickSearch('教養衝動')">#教養衝動</div>
             <div class="tag" onclick="quickSearch('教養挫折')">#教養挫折</div>
             <div class="tag" onclick="quickSearch('教養焦慮')">#教養焦慮</div>
@@ -62,11 +61,12 @@
 
         <div class="category-title">✨ 教養篇：孩子行為與溝通</div>
         <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('孩子抱怨')">#孩子抱怨</div>
-            <div class="tag" onclick="quickSearch('孩子不合群')">#孩子不合群</div>
-            <div class="tag" onclick="quickSearch('不專心')">#不專心</div>
-            <div class="tag" onclick="quickSearch('衝突')">#衝突</div>
-            <div class="tag" onclick="quickSearch('頂嘴')">#頂嘴</div>
+            <div class="tag" onclick="quickSearch('不專心')">#孩子不專心</div>
+            <div class="tag" onclick="quickSearch('衝突')">#孩子衝突</div>
+            <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
+            <div class="tag" onclick="quickSearch('拒學')">#孩子拒學</div>
+            <div class="tag" onclick="quickSearch('抱怨')">#孩子抱怨</div>
+            <div class="tag" onclick="quickSearch('不合群')">#孩子不合群</div>
         </div>
 
         <div id="loading">✨ 智多星正在調配幸福配方...</div>
@@ -105,10 +105,9 @@
                 rawLines.forEach(line => {
                     if (line.includes('https://')) {
                         let url = line.match(/https?:\/\/[^\s]+/)[0];
-                        // 修正顏色判斷邏輯
                         if (line.includes('工具')) {
                             finalHtml += `<a href="${url}" target="_blank" class="url-button btn-tool">🛠️ 領取幸福工具包</a>`;
-                        } else if (line.includes('調味')) {
+                        } else {
                             finalHtml += `<a href="${url}" target="_blank" class="url-button btn-vid">🎬 打開幸福調味包</a>`;
                         }
                     } else {
@@ -120,7 +119,7 @@
                 rBox.innerText = data.reflection || "您的用心是孩子的福氣！";
             }
         } catch (e) { 
-            loading.innerText = "❌ 幸福連線中，請稍候重試！"; 
+            loading.innerText = "❌ 大腦連線中，請稍候重試！"; 
         }
     }
 </script>
