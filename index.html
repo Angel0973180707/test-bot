@@ -5,34 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>幸福智多星</title>
     <style>
-        :root { --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7; --think-blue: #e3f2fd; --tool-green: #8bc34a; }
+        :root { --angel-pink: #ffb6c1; --deep-pink: #d63384; --soft-bg: #fff5f7; --think-blue: #007bff; --soft-blue: #e3f2fd; }
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--soft-bg); margin: 0; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-        .header-section { padding: 30px 20px 20px; text-align: center; background: linear-gradient(to bottom, #fff0f3, #ffffff); }
-        .ambassador-mini { width: 120px; height: 120px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 15px rgba(214,51,132,0.2); margin: 0 auto 15px; overflow: hidden; }
+        .header-section { padding: 25px 20px 15px; text-align: center; background: linear-gradient(to bottom, #fff0f3, #ffffff); }
+        .ambassador-mini { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 15px rgba(214,51,132,0.2); margin: 0 auto 12px; overflow: hidden; }
         .ambassador-mini img { width: 100%; height: 100%; object-fit: cover; }
-        .header-text h2 { margin: 0; color: var(--deep-pink); font-size: 1.8rem; }
-        .header-text p { margin: 5px 0 0; color: #888; font-size: 1rem; font-weight: bold; }
+        .header-text h2 { margin: 0; color: var(--deep-pink); font-size: 1.5rem; }
+        .header-text p { margin: 5px 0 0; color: #888; font-size: 0.9rem; font-weight: bold; }
+        
         .main-content { padding: 0 20px 30px; }
-        .action-row { display: flex; gap: 8px; margin: 20px 0; }
+        .action-row { display: flex; gap: 8px; margin: 15px 0; }
         .search-group { display: flex; background: #fff; border: 2px solid var(--angel-pink); border-radius: 50px; padding: 4px; flex: 1; }
-        .search-group input { flex: 1; border: none; padding: 10px 15px; border-radius: 50px; outline: none; font-size: 1.1rem; width: 100px; }
-        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 0 20px; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        .happy-btn { background: #fbc02d; border: none; padding: 0 15px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(251, 192, 45, 0.3); white-space: nowrap; font-weight: bold; color: #5d4037; }
-        .category-title { font-size: 1.1rem; color: var(--deep-pink); margin: 25px 0 12px; font-weight: bold; border-bottom: 1px solid #ffeef1; padding-bottom: 5px; }
-        .suggest-tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .tag { background: white; border: 1.5px solid var(--angel-pink); color: var(--deep-pink); padding: 8px 16px; border-radius: 20px; font-size: 1rem; cursor: pointer; }
-        
-        #loading { display: none; text-align: center; margin: 20px 0; color: var(--deep-pink); font-weight: bold; }
-        #response-panel { display: none; margin-top: 20px; animation: fadeIn 0.5s; }
-        .angel-talk { background: #fffafb; padding: 20px; border-radius: 18px; border-left: 6px solid var(--deep-pink); line-height: 1.8; color: #333; font-size: 1.1rem; white-space: pre-wrap; margin-bottom: 15px; word-break: break-all; }
-        .think-box { background: var(--think-blue); border-radius: 18px; padding: 18px; margin: 15px 0; color: #1565c0; border: 1px dashed #2196f3; }
+        .search-group input { flex: 1; border: none; padding: 8px 12px; border-radius: 50px; outline: none; font-size: 1rem; width: 80px; }
+        .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 0 15px; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+        .happy-btn { background: #fbc02d; border: none; padding: 0 12px; border-radius: 50px; cursor: pointer; font-weight: bold; color: #5d4037; font-size: 0.85rem; white-space: nowrap; }
 
-        /* 🎀 新增：網址按鈕化樣式 */
-        .url-button { display: inline-block; background-color: var(--deep-pink); color: white !important; padding: 10px 20px; border-radius: 25px; text-decoration: none !important; font-weight: bold; margin: 8px 0; font-size: 0.95rem; box-shadow: 0 3px 6px rgba(214,51,132,0.2); transition: 0.3s; }
-        .url-button:active { transform: scale(0.95); }
+        .category-title { font-size: 1rem; color: var(--deep-pink); margin: 20px 0 10px; font-weight: bold; border-bottom: 1px solid #ffeef1; padding-bottom: 5px; }
+        .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { background: white; border: 1px solid var(--angel-pink); color: var(--deep-pink); padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #loading { display: none; text-align: center; margin: 20px 0; color: var(--deep-pink); font-weight: bold; font-size: 0.9rem; }
+        #response-panel { display: none; margin-top: 15px; animation: fadeIn 0.5s; }
+        
+        /* 🌸 主文字區：縮小字體並優化排版 */
+        .angel-talk { background: #fffafb; padding: 18px; border-radius: 18px; border-left: 5px solid var(--deep-pink); line-height: 1.6; color: #333; font-size: 0.95rem; white-space: pre-wrap; margin-bottom: 12px; text-align: justify; }
+        .think-box { background: var(--soft-blue); border-radius: 18px; padding: 15px; margin: 10px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.9rem; line-height: 1.5; }
+
+        /* 🎀 按鈕設計 */
+        .btn-container { margin: 10px 0; }
+        .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 10px; border-radius: 12px; text-decoration: none !important; font-weight: bold; margin: 8px 0; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-tool { background-color: var(--think-blue); } /* 工具包藍色 */
+        .btn-vid { background-color: var(--deep-pink); }  /* 調味包粉色 */
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -53,15 +59,13 @@
             <div class="tag" onclick="quickSearch('教養衝動')">#教養衝動</div>
             <div class="tag" onclick="quickSearch('教養挫折')">#教養挫折</div>
             <div class="tag" onclick="quickSearch('教養焦慮')">#教養焦慮</div>
-            <div class="tag" onclick="quickSearch('壓力山大')">#壓力山大</div>
         </div>
 
         <div class="category-title">✨ 教養篇：孩子行為與溝通</div>
         <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('不專心')">#孩子不專心</div>
-            <div class="tag" onclick="quickSearch('衝突')">#孩子衝突</div>
-            <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
-            <div class="tag" onclick="quickSearch('拒學')">#孩子拒學</div>
+            <div class="tag" onclick="quickSearch('不專心')">#不專心</div>
+            <div class="tag" onclick="quickSearch('衝突')">#衝突</div>
+            <div class="tag" onclick="quickSearch('頂嘴')">#頂嘴</div>
         </div>
 
         <div id="loading">✨ 智多星正在調配幸福配方...</div>
@@ -80,10 +84,7 @@
         "現在的教養書都在教我們如何「不打不罵」，但沒一本書教我們如何在孩子把化妝品塗滿馬桶時，還能維持正常血壓。",
         "所謂「父愛如山」，意思就是不管家裡發生什麼事，爸爸都像一座山一樣，坐在沙發上一動也不動。",
         "每個家長都有特異功能：我們能聽見兩層樓外孩子偷開冰箱的聲音，卻聽不見他在耳邊說『我功課寫完了』。",
-        "生孩子前，以為家裡是文青風；生孩子後，變成了「命案現場風」——到處是樂高殘肢和受害者的尖叫。",
-        "育兒就是一場長達 20 年的修行，孩子是你的業障，老公是你的考驗，而你的忍耐力是唯一的法號。",
-        "如果你發現你的孩子突然變得安靜，請不要慶幸，趕快去檢查你的筆電鍵盤是不是少了好幾個按鍵。",
-        "世界上最遠的距離，不是生與死。而是我叫你趕快去洗澡，你卻依然在看 YouTube。"
+        "生孩子前，以為家裡是文青風；生孩子後，變成了「命案現場風」——到處是樂高殘肢和受害者的尖叫。"
     ];
     
     function quickSearch(word) { document.getElementById('userInput').value = word; fetchFromCloud(false); }
@@ -95,13 +96,11 @@
         const rBox = document.getElementById('reflectionBox');
         const inputVal = document.getElementById('userInput').value;
         
-        loading.style.display = "block"; 
-        panel.style.display = "none";
+        loading.style.display = "block"; panel.style.display = "none";
 
         if (isJoke) {
             const randomJoke = localJokes[Math.floor(Math.random() * localJokes.length)];
-            loading.style.display = "none";
-            panel.style.display = "block";
+            loading.style.display = "none"; panel.style.display = "block";
             gBox.innerHTML = "【🔥 教養大實話】<br><br>" + randomJoke;
             rBox.innerText = "笑一笑，世界更甜美！";
             return;
@@ -115,16 +114,26 @@
             
             if (data) {
                 panel.style.display = "block";
-                let content = data.guidance || "智多星正在為您準備建議...";
+                let rawContent = data.guidance || "";
                 
-                // 🚀 重點：將網址轉換為漂亮的粉紅按鈕
-                let linkedContent = content.replace(/(https?:\/\/[^\s]+)/g, '<br><a href="$1" target="_blank" class="url-button">👉 點我開啟連結</a><br>');
-                
-                gBox.innerHTML = linkedContent;
+                // 🔄 解析逻辑：根据名称生成对应颜色的按钮
+                let finalHtml = rawContent.split('\n').map(line => {
+                    if (line.includes('https://')) {
+                        let url = line.match(/https?:\/\/[^\s]+/)[0];
+                        let title = line.replace(url, '').replace(/【|】/g, '').trim();
+                        // 根据关键字决定按钮颜色
+                        let btnClass = title.includes('工具') ? 'btn-tool' : 'btn-vid';
+                        let btnIcon = title.includes('工具') ? '🛠️ ' : '📹 ';
+                        return `<a href="${url}" target="_blank" class="url-button ${btnClass}">${btnIcon}${title}</a>`;
+                    }
+                    return line;
+                }).join('<br>');
+
+                gBox.innerHTML = finalHtml;
                 rBox.innerText = data.reflection || "您的用心是孩子的福氣！";
             }
         } catch (e) { 
-            loading.innerText = "❌ 幸福大腦連線中，請稍候再試一次！"; 
+            loading.innerText = "❌ 幸福大腦連線中，請稍後再試一次！"; 
         }
     }
 </script>
