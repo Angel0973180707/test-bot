@@ -21,9 +21,27 @@
         .ask-btn { background: var(--deep-pink); color: white; border: none; padding: 0 12px; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
         .happy-btn { background: #fbc02d; border: none; padding: 0 10px; border-radius: 50px; cursor: pointer; font-weight: bold; color: #5d4037; font-size: 0.8rem; white-space: nowrap; }
 
-        .category-title { font-size: 0.9rem; color: var(--deep-pink); margin: 15px 0 8px; font-weight: bold; border-bottom: 1px solid #ffeef1; padding-bottom: 3px; }
-        .suggest-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-        .tag { background: white; border: 1px solid var(--angel-pink); color: var(--deep-pink); padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        .category-title { font-size: 0.9rem; color: var(--deep-pink); margin: 18px 0 8px; font-weight: bold; border-bottom: 1px solid #ffeef1; padding-bottom: 3px; }
+        
+        /* ✨ 智慧提問按鈕立體化設計 */
+        .suggest-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { 
+            background: white; 
+            border: 1px solid var(--angel-pink); 
+            border-bottom: 3px solid var(--angel-pink); /* 增加底部厚度 */
+            color: var(--deep-pink); 
+            padding: 6px 12px; 
+            border-radius: 12px; 
+            font-size: 0.82rem; 
+            cursor: pointer; 
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.1s;
+        }
+        .tag:active {
+            transform: translateY(2px); /* 按下時位移 */
+            border-bottom: 1px solid var(--angel-pink);
+        }
         
         #loading { display: none; text-align: center; margin: 15px 0; color: var(--deep-pink); font-size: 0.85rem; }
         #response-panel { display: none; margin-top: 12px; animation: fadeIn 0.4s; }
@@ -31,10 +49,9 @@
         .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.5; color: #333; font-size: 0.9rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
         .think-box { background: var(--soft-blue); border-radius: 15px; padding: 12px; margin: 8px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.85rem; }
 
-        /* 🎀 按鈕邏輯樣式 */
-        .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 10px 0; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-blue { background-color: var(--think-blue) !important; } /* 工具包專用藍 */
-        .btn-pink { background-color: var(--deep-pink) !important; }  /* 調味包專用粉 */
+        .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 10px 0; font-size: 0.9rem; box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+        .btn-tool { background-color: var(--think-blue) !important; border-bottom: 4px solid #0056b3; } 
+        .btn-vid { background-color: var(--deep-pink) !important; border-bottom: 4px solid #a61b5a; }  
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -58,16 +75,18 @@
             <div class="tag" onclick="quickSearch('教養衝動')">#教養衝動</div>
             <div class="tag" onclick="quickSearch('教養挫折')">#教養挫折</div>
             <div class="tag" onclick="quickSearch('教養焦慮')">#教養焦慮</div>
+            <div class="tag" onclick="quickSearch('教養衝突')">#教養衝突</div>
+            <div class="tag" onclick="quickSearch('關係疏離')">#關係疏離</div>
         </div>
 
         <div class="category-title">✨ 教養篇：孩子行為與溝通</div>
         <div class="suggest-tags">
-            <div class="tag" onclick="quickSearch('不專心')">#孩子不專心</div>
-            <div class="tag" onclick="quickSearch('衝突')">#孩子衝突</div>
-            <div class="tag" onclick="quickSearch('頂嘴')">#孩子頂嘴</div>
-            <div class="tag" onclick="quickSearch('拒學')">#孩子拒學</div>
-            <div class="tag" onclick="quickSearch('抱怨')">#孩子抱怨</div>
-            <div class="tag" onclick="quickSearch('不合群')">#孩子不合群</div>
+            <div class="tag" onclick="quickSearch('孩子不專心')">#孩子不專心</div>
+            <div class="tag" onclick="quickSearch('孩子衝突')">#孩子衝突</div>
+            <div class="tag" onclick="quickSearch('孩子頂嘴')">#孩子頂嘴</div>
+            <div class="tag" onclick="quickSearch('孩子拒學')">#孩子拒學</div>
+            <div class="tag" onclick="quickSearch('孩子抱怨')">#孩子抱怨</div>
+            <div class="tag" onclick="quickSearch('孩子不合群')">#孩子不合群</div>
         </div>
 
         <div id="loading">✨ 智多星正在調配幸福配方...</div>
@@ -137,12 +156,10 @@
                 rawLines.forEach(line => {
                     if (line.includes('https://')) {
                         let url = line.match(/https?:\/\/[^\s]+/)[0];
-                        // 🛠️ 強化解析邏輯：確保工具包一定是藍色且顯示工具包文字
                         if (line.includes('工具')) {
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-blue">🛠️ 領取幸福工具包</a>`;
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-tool">🛠️ 領取幸福工具包</a>`;
                         } else {
-                            // 🎬 調味包邏輯：粉色與打板圖示
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-pink">🎬 打開幸福調味包</a>`;
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-vid">🎬 打開幸福調味包</a>`;
                         }
                     } else {
                         finalHtml += line + "<br>";
@@ -153,7 +170,7 @@
                 rBox.innerText = data.reflection || "您的用心是孩子的福氣！";
             }
         } catch (e) { 
-            loading.innerText = "❌ 幸福大腦連線中，請稍候再試一次！"; 
+            loading.innerText = "❌ 大腦連線中，請稍候重試！"; 
         }
     }
 </script>
