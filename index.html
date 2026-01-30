@@ -28,14 +28,13 @@
         #loading { display: none; text-align: center; margin: 15px 0; color: var(--deep-pink); font-size: 0.85rem; }
         #response-panel { display: none; margin-top: 12px; animation: fadeIn 0.4s; }
         
-        /* 🌸 字體整體調小，避免手機版斷字凌亂 */
         .angel-talk { background: #fffafb; padding: 15px; border-radius: 15px; border-left: 4px solid var(--deep-pink); line-height: 1.5; color: #333; font-size: 0.9rem; white-space: pre-wrap; margin-bottom: 10px; text-align: justify; }
         .think-box { background: var(--soft-blue); border-radius: 15px; padding: 12px; margin: 8px 0; color: #1565c0; border: 1px dashed #2196f3; font-size: 0.85rem; }
 
-        /* 🎀 按鈕設計優化 */
-        .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 12px 0; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); line-height: 1.2; }
-        .btn-tool { background-color: var(--think-blue); } /* 工具包：藍色 */
-        .btn-vid { background-color: var(--deep-pink); }  /* 調味包：粉色 */
+        /* 🎀 按鈕顏色與文字固定樣式 */
+        .url-button { display: block; width: 100%; text-align: center; color: white !important; padding: 12px 5px; border-radius: 10px; text-decoration: none !important; font-weight: bold; margin: 12px 0; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn-tool { background-color: var(--think-blue); } /* 領取工具包：藍色 */
+        .btn-vid { background-color: var(--deep-pink); }  /* 打開調味包：粉色 */
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -117,15 +116,13 @@
                 rawLines.forEach(line => {
                     if (line.includes('https://')) {
                         let url = line.match(/https?:\/\/[^\s]+/)[0];
-                        let title = line.replace(url, '').replace(/[【】🛠️📹]/g, '').trim();
                         
-                        if (title.includes('工具')) {
-                            // 工具包：藍色按鈕
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-tool">🛠️ ${title}</a>`;
+                        if (line.includes('工具')) {
+                            // 藍色按鈕：文字固定為「領取幸福工具包」
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-tool">🛠️ 領取幸福工具包</a>`;
                         } else {
-                            // 調味包：粉色按鈕，顯示影片名稱
-                            let displayTitle = title || "幸福調味包";
-                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-vid">📹 ${displayTitle}</a>`;
+                            // 粉色按鈕：文字固定為「打開幸福調味包」
+                            finalHtml += `<a href="${url}" target="_blank" class="url-button btn-vid">📹 打開幸福調味包</a>`;
                         }
                     } else {
                         finalHtml += line + "<br>";
@@ -136,7 +133,7 @@
                 rBox.innerText = data.reflection || "您的用心是孩子的福氣！";
             }
         } catch (e) { 
-            loading.innerText = "❌ 大腦連線中，請稍候重試！"; 
+            loading.innerText = "❌ 大腦連線中，請稍後重試！"; 
         }
     }
 </script>
