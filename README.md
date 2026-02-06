@@ -1,4 +1,6 @@
+
 # test-bot
+保底版（沒有能量卡）
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
